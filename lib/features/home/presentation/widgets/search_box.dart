@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mega_news_app/features/home/presentation/controller/home_controller.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/voice_search.dart';
-import 'package:mega_news_app/features/home/domain/entities/article.dart';
+// imports intentionally kept minimal; page navigation handles search logic
+import '../../../show News/presentation/page/show_search_page.dart';
+// no direct article dependency here
 
 class SearchBox extends StatelessWidget {
   const SearchBox({super.key});
@@ -12,16 +12,8 @@ class SearchBox extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () async {
-        final ctrl = Get.find<HomeController>();
-        final result = await showSearch<Article?>(
-          context: context,
-          delegate: ArticleSearchDelegate(ctrl),
-        );
-        if (result != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(result.title)));
-        }
+        // Open the dedicated search page (which itself can open the voice search)
+        Get.to(() => const ShowSearchPage());
       },
       child: Container(
         decoration: BoxDecoration(

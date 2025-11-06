@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mega_news_app/app.dart';
@@ -13,6 +14,8 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   //init supabase
+  Gemini.init(apiKey: 'AIzaSyAMwbfHljjA7_KbeGGNgCmi4t1BMqfb6Zs');
+
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_APIKEY']!,

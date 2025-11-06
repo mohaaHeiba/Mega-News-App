@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mega_news_app/features/home/domain/entities/article.dart';
+import 'package:mega_news_app/features/home/presentation/pages/article_detail_page.dart';
 
 class ArticleTile extends StatelessWidget {
   final Article article;
@@ -12,18 +14,30 @@ class ArticleTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {},
+        onTap: () {
+          // Navigate to detail page
+          Get.to(() => ArticleDetailPage(article: article));
+        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  article.image,
-                  width: 110,
-                  height: 72,
-                  fit: BoxFit.cover,
+                child: Hero(
+                  tag: article.title,
+                  child: Image.network(
+                    article.image,
+                    width: 110,
+                    height: 72,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, _, __) => Container(
+                      width: 110,
+                      height: 72,
+                      color: Colors.grey.shade200,
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
