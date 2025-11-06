@@ -20,23 +20,27 @@ class AuthPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: appTheme.background,
 
-      // AppBar with Guest Button
+      // 🔹 AppBar contains Guest button only
       appBar: AppBar(
         backgroundColor: appTheme.background,
         elevation: 0,
+        automaticallyImplyLeading: false,
         actions: [
-          TextButton.icon(
-            onPressed: () async {
-              await GetStorage().write('loginBefore', true);
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: TextButton.icon(
+              onPressed: () async {
+                await GetStorage().write('loginBefore', true);
 
-              Get.offAllNamed(AppPages.loyoutPage);
-            },
-            icon: const Icon(Icons.person_outline),
-            label: const Text('Guest'),
-            style: TextButton.styleFrom(
-              foregroundColor: appTheme.colorScheme.primary,
-              textStyle: appTheme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+                Get.offAllNamed(AppPages.loyoutPage);
+              },
+              icon: Icon(Icons.person_outline, color: appTheme.primary),
+              label: Text(
+                'Guest',
+                style: appTheme.textTheme.titleMedium?.copyWith(
+                  color: appTheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

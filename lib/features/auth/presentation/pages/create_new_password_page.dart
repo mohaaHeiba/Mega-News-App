@@ -21,12 +21,16 @@ class CreateNewPasswordPage extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             //  Header Icon
-            Icon(Icons.lock_reset_rounded, color: appTheme.primary, size: 200),
+            Icon(
+              Icons.lock_reset_rounded,
+              color: appTheme.primary,
+              size: app.screenWidth * 0.18,
+            ),
             AppConst.h24,
 
             // Title
