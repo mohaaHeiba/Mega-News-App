@@ -8,7 +8,6 @@ import 'package:mega_news_app/core/constants/app_const.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<WelcomeController>();
@@ -19,7 +18,6 @@ class WelcomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: appTheme.background,
-
       // ========== AppBar ==========
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -69,12 +67,10 @@ class WelcomePage extends StatelessWidget {
           ),
         ],
       ),
-
       // ========== Body ==========
       body: Column(
         children: [
           AppConst.h12,
-
           // ===== Images =====
           SizedBox(
             width: double.infinity,
@@ -88,129 +84,160 @@ class WelcomePage extends StatelessWidget {
               },
             ),
           ),
-
           AppConst.h20,
-
-          // ===== Texts =====
+          // --- Start of Edits ---
           Expanded(
-            child: PageView.builder(
-              controller: controller.textController,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: pages.length,
-              itemBuilder: (context, index) {
-                final page = pages[index];
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        Text(
-                          page["title"]!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: appTheme.textTheme.bodyLarge?.color,
-                          ),
-                        ),
-                        AppConst.h12,
-                        Text(
-                          page["subtitle"]!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: appTheme.textTheme.bodyMedium?.color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-          // ===== Cursor =====
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  pages.length,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 400),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: controller.currentIndex.value == index ? 28 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: controller.currentIndex.value == index
-                          ? appTheme.colorScheme.primary
-                          : appTheme.colorScheme.primary.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+              () => AnimatedSlide(
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeInOut,
+                offset: controller.showContent.value
+                    ? Offset.zero
+                    : const Offset(0, 0.3),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 800),
+                  opacity: controller.showContent.value ? 1.0 : 0.0,
 
-          // ===== Buttons =====
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: Obx(
-              () => SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (controller.currentIndex.value < pages.length - 1) {
-                      controller.imageController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                      controller.textController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    } else {
-                      Get.toNamed(AppPages.authPage);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: appTheme.colorScheme.primary,
-                    foregroundColor: appTheme.colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    elevation: 6,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                     children: [
-                      Text(
-                        controller.currentIndex.value == pages.length - 1
-                            ? s.getStarted
-                            : s.next,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      // ===== Texts =====
+                      Expanded(
+                        child: PageView.builder(
+                          controller: controller.textController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: pages.length,
+                          itemBuilder: (context, index) {
+                            final page = pages[index];
+                            return SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      page["title"]!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            appTheme.textTheme.bodyLarge?.color,
+                                      ),
+                                    ),
+                                    AppConst.h12,
+                                    Text(
+                                      page["subtitle"]!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: appTheme
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      AppConst.w4,
-                      Icon(
-                        controller.currentIndex.value == pages.length - 1
-                            ? Icons.rocket_launch_rounded
-                            : Icons.arrow_forward,
-                        size: 20,
+                      // ===== Cursor =====
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Obx(
+                          () => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              pages.length,
+                              (index) => AnimatedContainer(
+                                duration: const Duration(milliseconds: 400),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                ),
+                                width: controller.currentIndex.value == index
+                                    ? 28
+                                    : 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: controller.currentIndex.value == index
+                                      ? appTheme.colorScheme.primary
+                                      : appTheme.colorScheme.primary
+                                            .withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      // ===== Buttons =====
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                        child: Obx(
+                          () => SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (controller.currentIndex.value <
+                                    pages.length - 1) {
+                                  controller.imageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  );
+                                  controller.textController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeInOut,
+                                  );
+                                } else {
+                                  Get.toNamed(AppPages.authPage);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: appTheme.colorScheme.primary,
+                                foregroundColor: appTheme.colorScheme.onPrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                elevation: 6,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    controller.currentIndex.value ==
+                                            pages.length - 1
+                                        ? s.getStarted
+                                        : s.next,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  AppConst.w4,
+                                  Icon(
+                                    controller.currentIndex.value ==
+                                            pages.length - 1
+                                        ? Icons.rocket_launch_rounded
+                                        : Icons.arrow_forward,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      AppConst.h32,
                     ],
                   ),
                 ),
               ),
             ),
           ),
-          AppConst.h32,
         ],
       ),
     );

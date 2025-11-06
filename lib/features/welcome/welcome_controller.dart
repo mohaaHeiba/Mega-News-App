@@ -7,8 +7,17 @@ class WelcomeController extends GetxController {
   final PageController imageController = PageController();
   final PageController textController = PageController();
   final currentIndex = 0.obs;
-
   final loginBefore = GetStorage().write('loginBefore', true);
+
+  var showContent = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      showContent.value = true;
+    });
+  }
 
   List<Map<String, dynamic>> getPages(BuildContext context) {
     final s = S.of(context);
