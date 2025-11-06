@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:mega_news_app/core/routes/app_pages.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/auth_page.dart';
 
 class WelcomeController extends GetxController {
   final PageController imageController = PageController();
   final PageController textController = PageController();
   final currentIndex = 0.obs;
+
+  final loginBefore = GetStorage().write('loginBefore', true);
 
   final List<Map<String, dynamic>> pages = [
     {
@@ -32,6 +37,9 @@ class WelcomeController extends GetxController {
 
   void onPageChanged(int index) {
     currentIndex.value = index;
+    // if (index == 3) {
+    //   Get.toNamed(AppPages.authPage);
+    // }
 
     textController.animateToPage(
       index,

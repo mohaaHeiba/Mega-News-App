@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mega_news_app/core/routes/app_pages.dart';
 import 'package:mega_news_app/features/welcome/welcome_controller.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
 
@@ -183,6 +184,7 @@ class WelcomePage extends StatelessWidget {
                       );
                     } else {
                       // Navigate to home
+                      Get.toNamed(AppPages.authPage);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -222,7 +224,7 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
 
-          AppConst.h40, // مسافة أسفل الزر
+          AppConst.h40,
         ],
       ),
     );
