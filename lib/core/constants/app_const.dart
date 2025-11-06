@@ -1,11 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 class AppConst {
-  static double screenWidth(BuildContext context) =>
-      MediaQuery.of(context).size.width;
-
-  static double screenHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height;
   // Heights
   static const h4 = SizedBox(height: 4);
   static const h8 = SizedBox(height: 8);

@@ -11,6 +11,7 @@ import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/features/auth/data/auth_local.dart';
 import 'package:mega_news_app/features/auth/data/auth_service.dart';
 import 'package:mega_news_app/features/auth/domain/entity/auth_entity.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/email_verification_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController extends GetxController {
@@ -33,9 +34,6 @@ class AuthController extends GetxController {
   final isConfirmPasswordObscure = true.obs;
   final isLoading = false.obs;
 
-  // ------------------ Page Navigation ------------------
-  // PageController واحد فقط
-
   // ================= Page Navigation =================
   Future<void> goToRegister() async {
     pageController.animateToPage(
@@ -56,7 +54,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> goToForgotPass() async {
-    currentPage.value = 2; // تتوافق مع صفحة ForgotPassword
+    currentPage.value = 2;
     await Future.delayed(const Duration(milliseconds: 100));
     pageController.jumpToPage(2);
     await clearControllers();
@@ -80,10 +78,17 @@ class AuthController extends GetxController {
     await clearControllers();
   }
 
-  // ------------------ Auth Actions ------------------
+  /// ------------------ Auth Actions ------------------
+
   Future<void> signUp(String name, String email, String password) async {
     try {
       isLoading.value = true;
+      // --- check net first ---
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+      // ------------------------
+
       final user = await auth.signUp(
         name: name,
         email: email,
@@ -99,18 +104,34 @@ class AuthController extends GetxController {
 
       await localAuth.saveAuthData(authEntity);
 
-      // --- Updated ---
       customSnackbar(
-        title: 'Account Created',
-        message: 'Please verify your email.',
+        title: 'Account Created Successfully!',
+        message: 'A verification link has been sent to your email.',
         color: AppColors.success,
       );
-      goToLogin();
-    } catch (e) {
-      // --- Updated ---
+      Get.to(EmailVerificationPage(), transition: Transition.fadeIn);
+    } on NetworkAppException {
+      customSnackbar(
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
+        color: AppColors.error,
+      );
+    } on UserAlreadyExistsException {
+      customSnackbar(
+        title: 'Email Already Registered',
+        message: 'This email is already in use. Please log in instead.',
+        color: AppColors.warning,
+      );
+    } on AuthAppException catch (e) {
       customSnackbar(
         title: 'Signup Error',
-        message: e.toString(),
+        message: e.message,
+        color: AppColors.error,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
         color: AppColors.error,
       );
     } finally {
@@ -121,6 +142,11 @@ class AuthController extends GetxController {
   Future<void> signIn({required String email, required String password}) async {
     try {
       isLoading.value = true;
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+      // ------------------------
+
       final user = await auth.signIn(email: email, password: password);
 
       final authEntity = AuthEntity(
@@ -132,18 +158,33 @@ class AuthController extends GetxController {
 
       await localAuth.saveAuthData(authEntity);
 
-      // --- Updated and Corrected ---
       customSnackbar(
-        title: 'Welcome!',
-        message: 'Signed in successfully.',
+        title: 'Welcome Back!',
+        message: 'You’ve signed in successfully.',
         color: AppColors.success,
       );
-      // Get.offAllNamed(AppPages.loyoutPage);
-    } catch (e) {
-      // --- Updated ---
+    } on NetworkAppException {
       customSnackbar(
-        title: 'Login Error',
-        message: e.toString(),
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
+        color: AppColors.error,
+      );
+    } on MissingDataException {
+      customSnackbar(
+        title: 'Invalid Credentials',
+        message: 'Incorrect email or password. Please try again.',
+        color: AppColors.warning,
+      );
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Sign-in Error',
+        message: e.message,
+        color: AppColors.error,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
         color: AppColors.error,
       );
     } finally {
@@ -154,6 +195,11 @@ class AuthController extends GetxController {
   Future<void> googleSignIn() async {
     try {
       isLoading.value = true;
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+      // ------------------------
+
       final user = await auth.googleSignIN();
 
       final authEntity = AuthEntity(
@@ -169,7 +215,6 @@ class AuthController extends GetxController {
         message: 'Signed in successfully with Google.',
         color: AppColors.success,
       );
-      // Get.offAllNamed(AppPages.loyoutPage);
     } on NetworkAppException {
       customSnackbar(
         title: 'No Connection',
@@ -195,53 +240,110 @@ class AuthController extends GetxController {
 
   Future<void> logout() async {
     try {
+      isLoading.value = true;
+      // --- check net first ---
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+      // ------------------------
+
       await auth.logout();
       await localAuth.clearAuthData();
-      // --- Updated ---
+
       customSnackbar(
         title: 'Logged Out',
         message: 'You have been logged out successfully.',
         color: AppColors.success,
       );
       goToLogin();
-    } catch (e) {
-      // --- Updated ---
+    } on NetworkAppException {
       customSnackbar(
-        title: 'Logout Error',
-        message: e.toString(),
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
         color: AppColors.error,
       );
+    } on UserNotFoundException catch (e) {
+      customSnackbar(
+        title: 'User Not Found',
+        message: e.message,
+        color: AppColors.error,
+      );
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Logout Error',
+        message: e.message,
+        color: AppColors.warning,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
+        color: AppColors.error,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> deleteAccount() async {
     try {
+      isLoading.value = true;
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+
       final currentUser = await localAuth.getAuthData();
-      if (currentUser == null) throw 'No user logged in';
+      if (currentUser == null) {
+        throw const UserNotFoundException('No user is currently logged in.');
+      }
 
       await auth.deleteAccount(currentUser.id);
       await localAuth.clearAuthData();
 
-      // --- Updated ---
       customSnackbar(
-        title: 'Deleted',
-        message: 'Account has been removed.',
+        title: 'Account Deleted',
+        message: 'Your account has been permanently removed.',
         color: AppColors.success,
       );
       goToLogin();
-    } catch (e) {
-      // --- Updated ---
+    } on NetworkAppException {
       customSnackbar(
-        title: 'Delete Error',
-        message: e.toString(),
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
         color: AppColors.error,
       );
+    } on UserNotFoundException catch (e) {
+      customSnackbar(
+        title: 'User Not Found',
+        message: e.message,
+        color: AppColors.error,
+      );
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Deletion Failed',
+        message: e.message,
+        color: AppColors.warning,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
+        color: AppColors.error,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> updatePassword(String newPassword) async {
     try {
       isLoading.value = true;
+      // --- check net first ---
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+      // ------------------------
+
       await auth.updatePassword(newPassword);
 
       customSnackbar(
@@ -251,10 +353,22 @@ class AuthController extends GetxController {
       );
 
       backToLogin();
+    } on NetworkAppException {
+      customSnackbar(
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
+        color: AppColors.error,
+      );
     } on AuthAppException catch (e) {
       customSnackbar(
-        title: 'Error',
+        title: 'Update Error',
         message: e.message,
+        color: AppColors.warning,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
         color: AppColors.error,
       );
     } finally {
@@ -266,6 +380,7 @@ class AuthController extends GetxController {
     final email = emailController.text.trim();
 
     try {
+      // This check is fine here before loading
       if (!await NetworkService.isConnected) {
         throw const NetworkAppException('No internet connection.');
       }

@@ -36,6 +36,9 @@
     <data
         android:scheme="io.supabase.flutter"
         android:host="login-callback" />
+         <data
+        android:scheme="io.supabase.flutter"
+        android:host="reset-password" />
 </intent-filter>
 
         </activity>

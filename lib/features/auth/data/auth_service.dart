@@ -15,6 +15,9 @@ class AuthService {
     required String email,
     required String password,
   }) async {
+    if (!await NetworkService.isConnected) {
+      throw const NetworkAppException('No internet connection.');
+    }
     try {
       final res = await supabase.auth.signUp(
         email: email,
@@ -24,6 +27,16 @@ class AuthService {
       );
 
       if (res.user != null) {
+        // --- الإضافة الأولى: التحقق من المستخدم المسجل مسبقاً ---
+        final identities = res.user!.identities;
+        if (identities == null || identities.isEmpty) {
+          throw const UserAlreadyExistsException('User already registered');
+        }
+        if (res.user!.emailConfirmedAt != null) {
+          throw const UserAlreadyExistsException('User already registered');
+        }
+        // ----------------------------------------------------
+
         final data = AuthModel(
           id: res.user!.id,
           name: name,
@@ -39,6 +52,9 @@ class AuthService {
           'signup_failed',
         );
       }
+    } on UserAlreadyExistsException {
+      // <-- إضافة للـ rethrow
+      rethrow;
     } on AuthApiException catch (e) {
       if (e.code == 'user_already_exists' ||
           e.code == 'email_exists' ||
@@ -60,6 +76,9 @@ class AuthService {
     required String password,
   }) async {
     try {
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
       final res = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
@@ -93,6 +112,9 @@ class AuthService {
   // ================= Reset Password =================
   Future<void> resetPassword(String email) async {
     try {
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
       await supabase.auth.resetPasswordForEmail(
         email,
         redirectTo: 'io.supabase.flutter://reset-password/',
@@ -114,6 +136,9 @@ class AuthService {
   // ================= Update Password =================
   Future<void> updatePassword(String newPassword) async {
     try {
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
     } on AuthApiException catch (e) {
       throw AuthAppException(e.message, e.code);
@@ -127,6 +152,9 @@ class AuthService {
   // google signIN
   Future<AuthModel> googleSignIN() async {
     try {
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
       await googleSignIn.initialize(
@@ -188,6 +216,10 @@ class AuthService {
 
   // ================= Sign Out =================
   Future<void> logout() async {
+    if (!await NetworkService.isConnected) {
+      throw const NetworkAppException('No internet connection.');
+    }
+    // ----------------------------------------
     try {
       await supabase.auth.signOut();
     } on AuthException catch (e) {

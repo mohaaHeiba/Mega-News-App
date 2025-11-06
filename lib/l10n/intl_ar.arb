@@ -1,0 +1,62 @@
+{
+  "welcomeTitle1": "أخبار من كل مكان",
+  "welcomeSubtitle1": "تابع الأخبار من مصادر موثوقة متعددة في تطبيق واحد",
+  "welcomeTitle2": "بحث ذكي وملخصات فورية",
+  "welcomeSubtitle2": "ابحث عن أي موضوع واحصل على ملخص شامل للأخبار المتعلقة به",
+  "welcomeTitle3": "احفظ ما يهمك",
+  "welcomeSubtitle3": "أضف الأخبار المهمة إلى المفضلة واقرأها في أي وقت",
+  "welcomeTitle4": "إشعارات لحظية",
+  "welcomeSubtitle4": "كن أول من يعرف الأخبار العاجلة من كل المصادر",
+  "skip": "تخطي",
+  "next": "التالي",
+  "getStarted": "ابدأ الآن",
+
+
+  "auth":"______________________________________",
+
+
+   "create": "إنشاء كلمة مرور جديدة",
+  "set_strong_password": "أنشئ كلمة مرور قوية لحماية حسابك.",
+  "new_password": "كلمة المرور الجديدة",
+  "confirm_new_password": "تأكيد كلمة المرور الجديدة",
+  "update_password": "تحديث كلمة المرور",
+  "remembered_password": "تذكّرت كلمة المرور؟",
+  "log_in": "تسجيل الدخول",
+
+   "welcome_back": "مرحبًا بعودتك!",
+  "login_to_continue": "سجّل الدخول إلى حسابك للمتابعة",
+  "email": "البريد الإلكتروني",
+  "enter_email": "أدخل بريدك الإلكتروني",
+  "password": "كلمة المرور",
+  "enter_password": "أدخل كلمة المرور",
+  "forgot_password": "نسيت كلمة المرور؟",
+  "or_continue_with": "أو تابع باستخدام",
+  "sign_in_with_google": "تسجيل الدخول باستخدام Google",
+  "dont_have_account": "ليس لديك حساب؟ ",
+  "sign_up": "إنشاء حساب",
+
+
+   "registerTitle": "أنشئ حسابك",
+  "registerSubtitle": "انضم إلينا وابدأ في استكشاف كل المميزات الرائعة التي نقدمها!",
+  "hintFullName": "أدخل اسمك الكامل",
+  "labelFullName": "الاسم الكامل",
+  "hintEmail": "أدخل بريدك الإلكتروني",
+  "labelEmail": "البريد الإلكتروني",
+  "hintPassword": "أدخل كلمة المرور",
+  "labelPassword": "كلمة المرور",
+  "hintConfirmPassword": "أعد إدخال كلمة المرور",
+  "labelConfirmPassword": "تأكيد كلمة المرور",
+  "buttonSignUp": "إنشاء حساب",
+  "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+  "buttonLogin": "تسجيل الدخول",
+
+  "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني أدناه وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.",
+  "buttonSendResetLink": "إرسال رابط إعادة التعيين",
+  "rememberPassword": "هل تتذكر كلمة المرور؟",
+
+  "emailVerificationMessage": "لقد أرسلنا رابط التحقق إلى ",
+  "emailVerificationInstruction": "يرجى التحقق من بريدك الإلكتروني للمتابعة..."
+
+
+}

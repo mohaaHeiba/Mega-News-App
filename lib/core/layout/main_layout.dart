@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/layout/bottom_nav_bar.dart';
 import 'package:mega_news_app/core/layout/layout_controller.dart';
-import 'package:mega_news_app/features/home/presentation/pages/home_page.dart';
-import 'package:mega_news_app/features/search/summrization.dart';
-import 'package:mega_news_app/features/settings/presentation/pages/settings_page.dart';
 
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
@@ -13,7 +10,7 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LayoutController());
 
-    final pages = const [HomePage(), Summrization(), SettingsPage()];
+    final pages = const [Center()];
 
     return Obx(
       () => Scaffold(

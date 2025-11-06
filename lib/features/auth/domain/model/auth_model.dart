@@ -1,7 +1,6 @@
 import 'package:mega_news_app/features/auth/domain/entity/auth_entity.dart';
 
 class AuthModel extends AuthEntity {
-  // DateTime representation of createdAt
   final DateTime? createdAtDate;
 
   AuthModel({
@@ -11,7 +10,6 @@ class AuthModel extends AuthEntity {
     this.createdAtDate,
   }) : super(createdAt: createdAtDate?.toIso8601String());
 
-  /// Create AuthModel from Map
   factory AuthModel.fromMap(Map<String, dynamic> map) {
     return AuthModel(
       id: map['id'] as String,

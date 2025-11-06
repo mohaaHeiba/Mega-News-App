@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/layout/main_layout.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/auth_page.dart';
-import 'package:mega_news_app/features/home/presentation/pages/home_page.dart';
-import 'package:mega_news_app/features/settings/presentation/pages/settings_page.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/create_new_password_page.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:mega_news_app/features/welcome/welcome_page.dart';
 
 class AppPages {
@@ -27,30 +27,30 @@ class AppPages {
       page: () => AuthPage(),
       transition: Transition.fadeIn,
     ),
+    // GetPage(
+    //   name: homePage,
+    //   page: () => HomePage(),
+    //   transition: Transition.rightToLeft,
+    // ),
     GetPage(
-      name: homePage,
-      page: () => HomePage(),
-      transition: Transition.rightToLeft,
+      name: forgotPassPage,
+      page: () => ForgotPasswordPage(),
+      transition: Transition.fadeIn,
     ),
-    // GetPage(
-    //   name: forgotPassPage,
-    //   page: () => ForgotPasswordPage(),
-    //   transition: Transition.fadeIn,
-    // ),
-    // GetPage(
-    //   name: createNewPassPage,
-    //   page: () => CreateNewPasswordPage(),
-    //   transition: Transition.fadeIn,
-    // ),
+    GetPage(
+      name: createNewPassPage,
+      page: () => CreateNewPasswordPage(),
+      transition: Transition.fadeIn,
+    ),
     GetPage(
       name: loyoutPage,
       page: () => MainLayout(),
       transition: Transition.fadeIn,
     ),
-    GetPage(
-      name: settingsPage,
-      page: () => SettingsPage(),
-      transition: Transition.fadeIn,
-    ),
+    // GetPage(
+    //   name: settingsPage,
+    //   page: () => SettingsPage(),
+    //   transition: Transition.fadeIn,
+    // ),
   ];
 }

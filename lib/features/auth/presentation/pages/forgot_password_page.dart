@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
 import 'package:mega_news_app/core/custom/textfileds/text_form_fileds_widget.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
+import 'package:mega_news_app/core/theme/app_theme_helper.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
 import 'package:mega_news_app/core/utils/validator.dart';
 import 'package:mega_news_app/features/auth/presentation/controller/auth_controller.dart';
 
@@ -12,8 +14,9 @@ class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<AuthController>();
-    final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
+    final appTheme = AppThemeHelper(context);
+    final app = AppContextHelper(context);
+    final s = app.s;
 
     return SingleChildScrollView(
       child: Align(
@@ -23,48 +26,54 @@ class ForgotPasswordPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Icon
               Icon(
                 Icons.lock_reset_rounded,
-                color: theme.colorScheme.primary,
-                size: size.width * 0.18,
+                color: appTheme.colorScheme.primary,
+                size: app.screenWidth * 0.18,
               ),
               AppConst.h24,
+
+              // Title
               Text(
-                'Forgot Password?',
+                s.forgotPasswordTitle,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
+                style: appTheme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
-                  color: theme.colorScheme.onBackground,
+                  color: appTheme.colorScheme.onBackground,
                 ),
               ),
               AppConst.h12,
+
+              // Description
               Text(
-                'Enter your email below and we’ll send you a link to reset your password.',
+                s.forgotPasswordSubtitle,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.8),
+                style: appTheme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.colorScheme.onSurface.withOpacity(0.8),
                 ),
               ),
               AppConst.h40,
 
-              /// 🔹 Email Field
+              // Email Field
               textFieldWidget(
                 controller: controller.emailController,
-                hint: 'Email Address',
+                label: s.labelEmail,
+                hint: s.hintEmail,
                 icon: Icons.email_outlined,
                 inputType: TextInputType.emailAddress,
                 validator: (value) => Validator().validateEmail(value ?? ''),
               ),
               AppConst.h24,
 
-              /// 🔹 Send Reset Link
+              // Send Reset Link Button
               Obx(
                 () => SizedBox(
                   height: 54,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
+                      backgroundColor: appTheme.colorScheme.primary,
                     ),
                     onPressed: controller.isLoading.value
                         ? null
@@ -77,11 +86,11 @@ class ForgotPasswordPage extends StatelessWidget {
                           },
                     child: controller.isLoading.value
                         ? CircularProgressIndicator(
-                            color: theme.colorScheme.onPrimary,
+                            color: appTheme.colorScheme.onPrimary,
                           )
                         : Text(
-                            'Send Reset Link',
-                            style: theme.textTheme.titleMedium?.copyWith(
+                            s.buttonSendResetLink,
+                            style: appTheme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: AppColors.background,
                               fontSize: 18,
@@ -92,21 +101,21 @@ class ForgotPasswordPage extends StatelessWidget {
               ),
               AppConst.h24,
 
-              /// 🔹 Back to Login
+              // Back to Login
               Center(
                 child: GestureDetector(
                   onTap: controller.backFromForgotPass,
                   child: RichText(
                     text: TextSpan(
-                      text: "Remember your password? ",
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      text: "${s.rememberPassword} ",
+                      style: appTheme.textTheme.bodyMedium?.copyWith(
+                        color: appTheme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                       children: [
                         TextSpan(
-                          text: 'Log In',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.primary,
+                          text: s.buttonLogin,
+                          style: appTheme.textTheme.bodyMedium?.copyWith(
+                            color: appTheme.colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
                           ),

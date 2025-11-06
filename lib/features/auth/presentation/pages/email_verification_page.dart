@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mega_news_app/features/auth/presentation/controller/auth_controller.dart';
+import 'package:mega_news_app/core/constants/app_const.dart';
+import 'package:mega_news_app/core/theme/app_theme_helper.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
 
 class EmailVerificationPage extends StatelessWidget {
   const EmailVerificationPage({super.key});
@@ -8,8 +10,9 @@ class EmailVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final email = Get.arguments;
-    final controller = Get.find<AuthController>();
-    final theme = Theme.of(context);
+    final appTheme = AppThemeHelper(context);
+    final app = AppContextHelper(context);
+    final s = app.s;
 
     return Scaffold(
       body: Stack(
@@ -18,21 +21,25 @@ class EmailVerificationPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(color: theme.colorScheme.primary),
-                const SizedBox(height: 24),
+                CircularProgressIndicator(color: appTheme.primary),
+                AppConst.h24,
+
+                // Verification message
                 Text(
-                  "We've sent a verification link to\n$email",
+                  '${s.emailVerificationMessage} $email',
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onBackground,
+                  style: appTheme.textTheme.bodyLarge?.copyWith(
+                    color: appTheme.colorScheme.onBackground,
                   ),
                 ),
-                const SizedBox(height: 12),
+                AppConst.h12,
+
+                // Instruction text
                 Text(
-                  "Please verify your email to continue...",
+                  '${s.emailVerificationInstruction} $email',
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onBackground.withOpacity(0.7),
+                  style: appTheme.textTheme.bodyMedium?.copyWith(
+                    color: appTheme.colorScheme.onBackground.withOpacity(0.7),
                   ),
                 ),
               ],

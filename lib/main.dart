@@ -14,7 +14,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   //init supabase
-  Gemini.init(apiKey: 'AIzaSyAMwbfHljjA7_KbeGGNgCmi4t1BMqfb6Zs');
+  Gemini.init(apiKey: dotenv.env['GEMINI_API']!);
 
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL']!,
@@ -24,7 +24,7 @@ Future<void> main() async {
   //load theme adn state
   await GetStorage.init();
 
-  // GetStorage().erase();
+  GetStorage().erase();
 
   Get.lazyPut(() => WelcomeController());
 

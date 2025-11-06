@@ -127,7 +127,20 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.lightOverlay,
-      hintStyle: const TextStyle(color: AppColors.textFaintLight),
+
+      hintStyle: const TextStyle(color: AppColors.textFaintLight, fontSize: 14),
+
+      labelStyle: const TextStyle(
+        color: AppColors.textFaint,
+        fontWeight: FontWeight.w600,
+        fontSize: 15,
+      ),
+      floatingLabelStyle: const TextStyle(
+        color: AppColors.primaryDark,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
+
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(color: AppColors.primary, width: 1),
@@ -143,6 +156,8 @@ class AppTheme {
           width: 0.8,
         ),
       ),
+
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
   );
 }
