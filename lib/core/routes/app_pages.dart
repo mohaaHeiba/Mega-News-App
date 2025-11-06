@@ -1,0 +1,20 @@
+import 'package:get/get.dart';
+import 'package:mega_news_app/features/welcome/welcome_page.dart';
+
+class AppPages {
+  static const welcomePage = '/welcome';
+  static const authPage = '/auth';
+  static const homePage = '/home';
+  static const forgotPassPage = '/forgotPass';
+  static const createNewPassPage = '/newPass';
+  static const loyoutPage = '/loyoutPage';
+
+  static List<GetPage> routes = [
+    GetPage(
+      name: welcomePage,
+      page: () => const WelcomePage(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 700),
+    ),
+  ];
+}
