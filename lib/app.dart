@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     // final loginBefore = GetStorage().read('loginBefore') ?? false;
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       home: WelcomePage(),

@@ -11,7 +11,12 @@ class AppColors {
   ); // Dark AppBar أو highlights
 
   // ⚫ Backgrounds (Dark Mode)
-  static const Color background = Color(0xFF121212); // دارك مود أساسي
+  static const Color background = Color.fromARGB(
+    255,
+    33,
+    33,
+    33,
+  ); // دارك مود أساسي
   static const Color surface = Color(0xFF1E1E1E); // Cards
   static const Color overlay = Color(0xFF262626); // Elevated surfaces أو footer
 

@@ -1,108 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:mega_news_app/core/theme/app_colors.dart';
-import 'package:mega_news_app/core/theme/app_gradients.dart';
+import 'package:get/get.dart';
+import 'package:mega_news_app/features/welcome/welcome_controller.dart';
+import 'package:mega_news_app/core/constants/app_const.dart';
 
-class WelcomePage extends StatefulWidget {
+class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
-  State<WelcomePage> createState() => _WelcomePageState();
-}
-
-class _WelcomePageState extends State<WelcomePage> {
-  final PageController _imageController = PageController();
-  final PageController _textController = PageController();
-  int _currentIndex = 0;
-
-  final List<Map<String, dynamic>> pages = [
-    {
-      "title": "News from Everywhere",
-      "subtitle": "Follow news from multiple reliable sources in one app",
-      "image": "assets/images/news_aggregation.png",
-    },
-    {
-      "title": "Smart Search & Instant Summaries",
-      "subtitle":
-          "Search any topic and get a comprehensive summary of related news",
-      "image": "assets/images/search_summary.png",
-    },
-    {
-      "title": "Save What Matters",
-      "subtitle": "Add important news to favorites and read them anytime",
-      "image": "assets/images/favorites.png",
-    },
-    {
-      "title": "Real-time Notifications",
-      "subtitle": "Be the first to know breaking news from all sources",
-      "image": "assets/images/notifications.png",
-    },
-  ];
-
-  @override
-  void dispose() {
-    _imageController.dispose();
-    _textController.dispose();
-    super.dispose();
-  }
-
-  void _onPageChanged(int index) {
-    setState(() => _currentIndex = index);
-    _textController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final size = MediaQuery.of(context).size;
+    final controller = Get.find<WelcomeController>();
+    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+
+      //===================== AppBar ========================
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.newspaper_rounded,
-                color: AppColors.primary,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 10),
+            Image.asset('assets/images/logo.png', width: 60),
+            // AppConst.w12,
             Text(
               'MegaNews',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isDark
-                    ? AppColors.textPrimary
-                    : AppColors.textPrimaryLight,
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
           ],
         ),
         actions: [
-          if (_currentIndex < pages.length - 1)
+          // Skip button
+          if (controller.currentIndex.value < controller.pages.length - 1)
             Padding(
               padding: const EdgeInsets.only(right: 12.0),
               child: TextButton(
                 onPressed: () {
-                  _imageController.animateToPage(
-                    pages.length - 1,
+                  controller.imageController.animateToPage(
+                    controller.pages.length - 1,
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOut,
                   );
-                  _textController.animateToPage(
-                    pages.length - 1,
+                  controller.textController.animateToPage(
+                    controller.pages.length - 1,
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOut,
                   );
@@ -112,123 +55,101 @@ class _WelcomePageState extends State<WelcomePage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
               ),
             ),
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: isDark
-              ? AppGradients.dark.background
-              : AppGradients.light.background,
-        ),
-        child: Column(
-          children: [
-            // --- (تعديل 1: تم زيادة المسافة لتنزيل الصورة) ---
-            const SizedBox(height: 30), // كانت 16
-            // ------------------------------------------
 
-            // PageView للصور فقط
-            SizedBox(
-              height: size.height * 0.4,
-              child: PageView.builder(
-                controller: _imageController,
-                onPageChanged: _onPageChanged,
-                itemCount: pages.length,
-                itemBuilder: (context, index) {
-                  return Padding(
+      body: Column(
+        children: [
+          AppConst.h12,
+          //===================== PageView للصور ========================
+          SizedBox(
+            height: AppConst.screenHeight(context) * 0.4,
+            child: PageView.builder(
+              controller: controller.imageController,
+              onPageChanged: controller.onPageChanged,
+              itemCount: controller.pages.length,
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: Image.asset(
+                    controller.pages[index]["image"]!,
+                    fit: BoxFit.contain,
+                  ),
+                );
+              },
+            ),
+          ),
+          AppConst.h20,
+
+          //===================== PageView للنصوص ========================
+          Expanded(
+            child: PageView.builder(
+              controller: controller.textController,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.pages.length,
+              itemBuilder: (context, index) {
+                final page = controller.pages[index];
+                return SingleChildScrollView(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.asset(
-                        pages[index]["image"]!,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // PageView للنصوص Scrollable
-            Expanded(
-              child: PageView.builder(
-                controller: _textController,
-                physics:
-                    const NeverScrollableScrollPhysics(), // منع السحب للنصوص
-                itemCount: pages.length,
-                itemBuilder: (context, index) {
-                  final page = pages[index];
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          Text(
-                            page["title"]!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: isDark
-                                  ? AppColors.textPrimary
-                                  : AppColors.textPrimaryLight,
-                            ),
+                    child: Column(
+                      children: [
+                        Text(
+                          page["title"]!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.bodyLarge?.color,
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            page["subtitle"]!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: isDark
-                                  ? AppColors.textSecondary
-                                  : AppColors.textSecondaryLight,
-                            ),
+                        ),
+                        AppConst.h12,
+                        Text(
+                          page["subtitle"]!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: theme.textTheme.bodyMedium?.color,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
+          ),
 
-            // Page Indicator
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Row(
+          //===================== Page Indicator ========================
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Obx(
+              () => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  pages.length,
+                  controller.pages.length,
                   (index) => AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOut,
                     margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentIndex == index ? 28 : 8,
+                    width: controller.currentIndex.value == index ? 28 : 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      gradient: _currentIndex == index
-                          ? LinearGradient(
-                              colors: [
-                                AppColors.primary,
-                                AppColors.primary.withOpacity(0.7),
-                              ],
-                            )
-                          : null,
-                      color: _currentIndex != index
-                          ? AppColors.primary.withOpacity(0.3)
-                          : null,
+                      color: controller.currentIndex.value != index
+                          ? theme.colorScheme.primary.withOpacity(0.3)
+                          : theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(4),
-                      boxShadow: _currentIndex == index
+                      boxShadow: controller.currentIndex.value == index
                           ? [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.3),
+                                color: theme.colorScheme.primary.withOpacity(
+                                  0.3,
+                                ),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -239,27 +160,24 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
               ),
             ),
+          ),
 
-            // Next / Get Started Button فقط
-            // --- (تعديل 2: تم تقليل المسافة العلوية لرفع الزر) ---
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                10,
-                20,
-                20,
-              ), // كانت (symmetric(horizontal: 20, vertical: 20
-              child: SizedBox(
+          //===================== Next / Get Started Button ========================
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            child: Obx(
+              () => SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_currentIndex < pages.length - 1) {
-                      _imageController.nextPage(
+                    if (controller.currentIndex.value <
+                        controller.pages.length - 1) {
+                      controller.imageController.nextPage(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeInOut,
                       );
-                      _textController.nextPage(
+                      controller.textController.nextPage(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeInOut,
                       );
@@ -268,19 +186,20 @@ class _WelcomePageState extends State<WelcomePage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
                     elevation: 6,
-                    shadowColor: AppColors.primary.withOpacity(0.4),
+                    shadowColor: theme.colorScheme.primary.withOpacity(0.4),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        _currentIndex == pages.length - 1
+                        controller.currentIndex.value ==
+                                controller.pages.length - 1
                             ? 'Get Started'
                             : 'Next',
                         style: const TextStyle(
@@ -288,11 +207,12 @@ class _WelcomePageState extends State<WelcomePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      AppConst.w4,
                       Icon(
-                        _currentIndex == pages.length - 1
+                        controller.currentIndex.value ==
+                                controller.pages.length - 1
                             ? Icons.rocket_launch_rounded
-                            : Icons.arrow_back,
+                            : Icons.arrow_forward,
                         size: 20,
                       ),
                     ],
@@ -300,10 +220,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 30),
-            // ------------------------------------------
-          ],
-        ),
+          ),
+
+          AppConst.h40, // مسافة أسفل الزر
+        ],
       ),
     );
   }
