@@ -124,7 +124,7 @@ class AuthService {
     }
   }
 
-  // ================= Google Sign-In =================
+  // google signIN
   Future<AuthModel> googleSignIN() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
@@ -144,6 +144,7 @@ class AuthService {
         );
       }
 
+      // login in supabase auth tables
       final response = await supabase.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
@@ -156,24 +157,28 @@ class AuthService {
         );
       }
 
+      //check its signing after this time to get him data
       final profileResponse = await supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .maybeSingle();
 
+      late AuthModel userProfile;
+
       if (profileResponse == null) {
-        final newProfile = AuthModel(
+        //create new table if not exits
+        userProfile = AuthModel(
           id: user.id,
           name: user.userMetadata?['name'] ?? user.email ?? '',
           email: user.email ?? '',
           createdAtDate: DateTime.now(),
         );
-        await supabase.from('profiles').insert(newProfile.toMap());
-        return newProfile;
-      } else {
-        return AuthModel.fromMap(profileResponse);
+
+        await supabase.from('profiles').insert(userProfile.toMap());
       }
+
+      return userProfile;
     } on SocketException {
       throw const NetworkAppException('No internet connection.');
     } catch (e) {

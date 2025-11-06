@@ -2,9 +2,16 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:mega_news_app/core/custom/custom_snackbar.dart';
+import 'package:mega_news_app/core/errors/app_exception.dart';
+import 'package:mega_news_app/core/routes/app_pages.dart';
+import 'package:mega_news_app/core/service/network_service.dart';
+import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/features/auth/data/auth_local.dart';
 import 'package:mega_news_app/features/auth/data/auth_service.dart';
 import 'package:mega_news_app/features/auth/domain/entity/auth_entity.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController extends GetxController {
   final AuthService auth = AuthService();
@@ -27,20 +34,51 @@ class AuthController extends GetxController {
   final isLoading = false.obs;
 
   // ------------------ Page Navigation ------------------
-  Future<void> goToRegister() async => pageController.animateToPage(
-    1,
-    duration: const Duration(milliseconds: 400),
-    curve: Curves.easeInOut,
-  );
+  // PageController واحد فقط
 
-  Future<void> goToLogin() async => pageController.animateToPage(
-    0,
-    duration: const Duration(milliseconds: 400),
-    curve: Curves.easeInOut,
-  );
+  // ================= Page Navigation =================
+  Future<void> goToRegister() async {
+    pageController.animateToPage(
+      1,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    await clearControllers();
+  }
 
-  Future<void> goToForgotPass() async => pageController.jumpToPage(2);
-  Future<void> goToNewPass() async => pageController.jumpToPage(3);
+  Future<void> goToLogin() async {
+    pageController.animateToPage(
+      0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    await clearControllers();
+  }
+
+  Future<void> goToForgotPass() async {
+    currentPage.value = 2; // تتوافق مع صفحة ForgotPassword
+    await Future.delayed(const Duration(milliseconds: 100));
+    pageController.jumpToPage(2);
+    await clearControllers();
+  }
+
+  Future<void> backFromForgotPass() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    pageController.jumpToPage(0);
+    await clearControllers();
+  }
+
+  Future<void> goToNewPass() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    pageController.jumpToPage(3);
+    await clearControllers();
+  }
+
+  Future<void> backToLogin() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    pageController.jumpToPage(0);
+    await clearControllers();
+  }
 
   // ------------------ Auth Actions ------------------
   Future<void> signUp(String name, String email, String password) async {
@@ -61,10 +99,20 @@ class AuthController extends GetxController {
 
       await localAuth.saveAuthData(authEntity);
 
-      Get.snackbar('Account Created', 'Please verify your email.');
+      // --- Updated ---
+      customSnackbar(
+        title: 'Account Created',
+        message: 'Please verify your email.',
+        color: AppColors.success,
+      );
       goToLogin();
     } catch (e) {
-      Get.snackbar('Signup Error', e.toString());
+      // --- Updated ---
+      customSnackbar(
+        title: 'Signup Error',
+        message: e.toString(),
+        color: AppColors.error,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -84,10 +132,20 @@ class AuthController extends GetxController {
 
       await localAuth.saveAuthData(authEntity);
 
-      Get.snackbar('Welcome', 'Signed in successfully');
-      Get.offAllNamed('/home');
+      // --- Updated and Corrected ---
+      customSnackbar(
+        title: 'Welcome!',
+        message: 'Signed in successfully.',
+        color: AppColors.success,
+      );
+      // Get.offAllNamed(AppPages.loyoutPage);
     } catch (e) {
-      Get.snackbar('Login Error', e.toString());
+      // --- Updated ---
+      customSnackbar(
+        title: 'Login Error',
+        message: e.toString(),
+        color: AppColors.error,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -106,10 +164,30 @@ class AuthController extends GetxController {
       );
 
       await localAuth.saveAuthData(authEntity);
-      Get.snackbar('Welcome', 'Signed in with Google');
-      Get.offAllNamed('/home');
+      customSnackbar(
+        title: 'Welcome!',
+        message: 'Signed in successfully with Google.',
+        color: AppColors.success,
+      );
+      // Get.offAllNamed(AppPages.loyoutPage);
+    } on NetworkAppException {
+      customSnackbar(
+        title: 'No Connection',
+        message: 'Please check your internet connection and try again.',
+        color: AppColors.error,
+      );
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Sign-in Error',
+        message: e.message,
+        color: AppColors.warning,
+      );
     } catch (e) {
-      Get.snackbar('Google Sign-In Error', e.toString());
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
+        color: AppColors.error,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -119,10 +197,20 @@ class AuthController extends GetxController {
     try {
       await auth.logout();
       await localAuth.clearAuthData();
-      Get.snackbar('Logged Out', 'You have been logged out successfully');
+      // --- Updated ---
+      customSnackbar(
+        title: 'Logged Out',
+        message: 'You have been logged out successfully.',
+        color: AppColors.success,
+      );
       goToLogin();
     } catch (e) {
-      Get.snackbar('Logout Error', e.toString());
+      // --- Updated ---
+      customSnackbar(
+        title: 'Logout Error',
+        message: e.toString(),
+        color: AppColors.error,
+      );
     }
   }
 
@@ -134,11 +222,115 @@ class AuthController extends GetxController {
       await auth.deleteAccount(currentUser.id);
       await localAuth.clearAuthData();
 
-      Get.snackbar('Deleted', 'Account has been removed');
+      // --- Updated ---
+      customSnackbar(
+        title: 'Deleted',
+        message: 'Account has been removed.',
+        color: AppColors.success,
+      );
       goToLogin();
     } catch (e) {
-      Get.snackbar('Delete Error', e.toString());
+      // --- Updated ---
+      customSnackbar(
+        title: 'Delete Error',
+        message: e.toString(),
+        color: AppColors.error,
+      );
     }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      isLoading.value = true;
+      await auth.updatePassword(newPassword);
+
+      customSnackbar(
+        title: 'Password Updated',
+        message: 'Your password has been changed successfully.',
+        color: AppColors.success,
+      );
+
+      backToLogin();
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Error',
+        message: e.message,
+        color: AppColors.error,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetPassword() async {
+    final email = emailController.text.trim();
+
+    try {
+      if (!await NetworkService.isConnected) {
+        throw const NetworkAppException('No internet connection.');
+      }
+
+      isLoading.value = true;
+
+      await auth.resetPassword(email);
+
+      customSnackbar(
+        title: 'Email Sent',
+        message: 'A password reset link has been sent to your email.',
+        color: AppColors.success,
+      );
+      emailController.clear();
+    } on UserNotFoundException {
+      customSnackbar(
+        title: 'User Not Found',
+        message: 'No account found with this email.',
+        color: AppColors.error,
+      );
+    } on NetworkAppException {
+      customSnackbar(
+        title: 'No Internet',
+        message: 'Please check your connection and try again.',
+        color: AppColors.warning,
+      );
+    } on AuthAppException catch (e) {
+      customSnackbar(
+        title: 'Error',
+        message: e.message,
+        color: AppColors.error,
+      );
+    } catch (e) {
+      customSnackbar(
+        title: 'Unexpected Error',
+        message: 'Something went wrong. Please try again later.',
+        color: AppColors.error,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  final supabase = Supabase.instance.client;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    supabase.auth.onAuthStateChange.listen((data) {
+      final event = data.event;
+      final user = data.session?.user;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        goToNewPass();
+        return;
+      }
+
+      if (event == AuthChangeEvent.signedIn && user != null) {
+        if (user.emailConfirmedAt != null) {
+          GetStorage().write('loginBefore', true);
+          Get.offAllNamed(AppPages.loyoutPage);
+        }
+      }
+    });
   }
 
   // ------------------ Helpers ------------------

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mega_news_app/core/routes/app_pages.dart';
 import 'package:mega_news_app/core/theme/app_theme.dart';
-import 'package:mega_news_app/features/welcome/welcome_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:mega_news_app/core/layout/main_layout.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/auth_page.dart';
 import 'package:mega_news_app/features/home/presentation/pages/home_page.dart';
+import 'package:mega_news_app/features/settings/presentation/pages/settings_page.dart';
 import 'package:mega_news_app/features/welcome/welcome_page.dart';
 
 class AppPages {
@@ -10,6 +11,7 @@ class AppPages {
   static const homePage = '/home';
   static const forgotPassPage = '/forgotPass';
   static const createNewPassPage = '/newPass';
+  static const settingsPage = '/settingsPage';
 
   static const loyoutPage = '/loyoutPage';
 
@@ -43,6 +45,11 @@ class AppPages {
     GetPage(
       name: loyoutPage,
       page: () => MainLayout(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: settingsPage,
+      page: () => SettingsPage(),
       transition: Transition.fadeIn,
     ),
   ];

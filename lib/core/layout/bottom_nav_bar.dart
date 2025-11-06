@@ -47,29 +47,17 @@ class BottomNavBar extends StatelessWidget {
                   activeIcon: Icons.home_rounded,
                   label: 'Home',
                 ),
+
                 _navItem(
                   index: 1,
-                  controller: controller,
-                  icon: Icons.show_chart_outlined,
-                  activeIcon: Icons.show_chart_rounded,
-                  label: 'Markets',
-                ),
-                _navItem(
-                  index: 2,
                   controller: controller,
                   icon: Icons.search_outlined,
                   activeIcon: Icons.search_rounded,
                   label: 'Search',
                 ),
+
                 _navItem(
-                  index: 3,
-                  controller: controller,
-                  icon: Icons.groups_outlined,
-                  activeIcon: Icons.groups_rounded,
-                  label: 'Community',
-                ),
-                _navItem(
-                  index: 4,
+                  index: 2,
                   controller: controller,
                   icon: Icons.menu_rounded,
                   activeIcon: Icons.menu_open_rounded,

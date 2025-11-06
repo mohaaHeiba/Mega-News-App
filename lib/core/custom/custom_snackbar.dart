@@ -1,55 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-PreferredSizeWidget customAppbar(final VoidCallback backm, String title) {
-  return AppBar(
-    toolbarHeight: 80,
-    backgroundColor: Theme.of(Get.context!).colorScheme.background,
-    elevation: 0,
-    leadingWidth: 80,
-    leading: Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final colorScheme = theme.colorScheme;
-        return Center(
-          child: Container(
-            margin: const EdgeInsets.only(left: 18.0),
-            decoration: BoxDecoration(
-              color: colorScheme.primary,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: colorScheme.primary.withOpacity(0.4),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-                size: 20,
-              ),
-              onPressed: backm,
-            ),
-          ),
-        );
-      },
-    ),
-    title: Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        final colorScheme = theme.colorScheme;
-        return Text(
-          title,
-          style: TextStyle(
-            color: colorScheme.onBackground,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        );
-      },
+SnackbarController customSnackbar({
+  required String title,
+  required String message,
+  color = Colors.green,
+}) {
+  return Get.showSnackbar(
+    GetSnackBar(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      titleText: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+      messageText: Text(
+        message,
+        style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+      ),
+      backgroundColor: color,
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 4),
+      borderRadius: 8,
+      isDismissible: true,
+      dismissDirection: DismissDirection.horizontal,
+      forwardAnimationCurve: Curves.linearToEaseOut,
     ),
   );
 }

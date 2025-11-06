@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/features/auth/presentation/controller/auth_controller.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/create_new_password_page.dart';
+import 'package:mega_news_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/login_page.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/register_page.dart';
 
@@ -25,8 +27,8 @@ class AuthPage extends StatelessWidget {
               children: const [
                 LoginPage(),
                 RegisterPage(),
-                // ForgotPasswordPage(),
-                // CreateNewPasswordPage(),
+                ForgotPasswordPage(),
+                CreateNewPasswordPage(),
               ],
             ),
           ],
