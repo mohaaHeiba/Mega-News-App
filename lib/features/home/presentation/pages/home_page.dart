@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mega_news_app/core/constants/app_const.dart';
 import 'package:mega_news_app/features/home/presentation/controller/home_controller.dart';
 import 'package:mega_news_app/features/home/presentation/widgets/article_tile.dart';
 import 'package:mega_news_app/features/home/presentation/widgets/slider/carousel_slider_widget.dart';
@@ -28,8 +29,15 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+
+      // ============================
+      // MAIN CONTENT (Reactive UI)
+      // ============================
       body: SafeArea(
         child: Obx(() {
+          // =======================================================
+          // LOADING STATE (Shimmer placeholders while fetching)
+          // =======================================================
           if (ctrl.isLoading.value) {
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -37,9 +45,11 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Search box and categories are interactive even during load
+                  // Search and categories stay visible while loading
                   const SearchBox(),
-                  const SizedBox(height: 14),
+                  AppConst.h12,
+
+                  // Category chips
                   SizedBox(
                     height: 36,
                     child: ListView.builder(
@@ -57,9 +67,9 @@ class HomePage extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  AppConst.h16,
 
-                  // --- Shimmer Skeletons ---
+                  // Shimmer skeletons
                   Text('Featured', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   Shimmer.fromColors(
@@ -73,7 +83,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  AppConst.h20,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -81,19 +91,23 @@ class HomePage extends StatelessWidget {
                       TextButton(onPressed: null, child: const Text('See all')),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  buildShimmerList(), // Shimmer list
+                  AppConst.h8,
+                  buildShimmerList(),
                 ],
               ),
             );
           }
 
-          // --- حالة عدم وجود بيانات (Empty State) ---
+          // =======================================================
+          // EMPTY STATE (No articles found)
+          // =======================================================
           if (ctrl.articles.isEmpty) {
             return const Center(child: Text('No news found'));
           }
 
-          // --- حالة عرض البيانات (Data State) ---
+          // =======================================================
+          // DATA STATE (Display articles)
+          // =======================================================
           final articles = ctrl.articles;
           return RefreshIndicator(
             onRefresh: ctrl.fetchNews,
@@ -103,11 +117,11 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🔍 Search box
+                  // Search box
                   const SearchBox(),
                   const SizedBox(height: 14),
 
-                  // 🏷 Categories
+                  // Category chips
                   SizedBox(
                     height: 36,
                     child: ListView.builder(
@@ -125,37 +139,25 @@ class HomePage extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  AppConst.h16,
 
-                  // 🌟 Featured (carousel)
+                  // Featured section (carousel)
                   Text('Featured', style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  // نعرض أول 5 مقالات فقط في الـ carousel
+                  AppConst.h8,
+                  // Show first 5 articles in the carousel
                   CarouselSliderWidget(articles: articles.take(5).toList()),
-                  const SizedBox(height: 20),
+                  AppConst.h20,
 
-                  // 🕓 Latest
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Latest', style: theme.textTheme.titleMedium),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('See all'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                  // Latest section
+                  AppConst.h8,
 
-                  // نعرض باقي المقالات هنا (بعد أول 5)
+                  // Show remaining articles (after first 5)
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    // نتجاهل أول 5 مقالات لأنها في الـ featured
                     itemCount: (articles.length > 5) ? articles.length - 5 : 0,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      // نبدأ من المقال رقم 5
                       return ArticleTile(article: articles[index + 5]);
                     },
                   ),

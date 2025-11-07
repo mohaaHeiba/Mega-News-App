@@ -2,7 +2,6 @@
 //
 //     final newsapiResponseModel = newsapiResponseModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 NewsapiResponseModel newsapiResponseModelFromJson(String str) =>
@@ -14,7 +13,7 @@ String newsapiResponseModelToJson(NewsapiResponseModel data) =>
 class NewsapiResponseModel {
   final String status;
   final int totalResults;
-  final List<NewsApiArticleModel> articles; // <-- تم التعديل هنا
+  final List<NewsApiArticleModel> articles;
 
   NewsapiResponseModel({
     required this.status,
@@ -27,10 +26,7 @@ class NewsapiResponseModel {
         status: json["status"],
         totalResults: json["totalResults"],
         articles: List<NewsApiArticleModel>.from(
-          // <-- تم التعديل هنا
-          json["articles"].map(
-            (x) => NewsApiArticleModel.fromJson(x),
-          ), // <-- تم التعديل هنا
+          json["articles"].map((x) => NewsApiArticleModel.fromJson(x)),
         ),
       );
 
@@ -42,10 +38,8 @@ class NewsapiResponseModel {
 }
 
 class NewsApiArticleModel {
-  // <-- تم التعديل هنا
-  final NewsApiSourceModel source; // <-- تم التعديل هنا
-  final String?
-  author; // ملحوظة: خليت author و description و content يقبلوا null
+  final NewsApiSourceModel source;
+  final String? author;
   final String title;
   final String? description;
   final String url;
@@ -54,7 +48,6 @@ class NewsApiArticleModel {
   final String? content;
 
   NewsApiArticleModel({
-    // <-- تم التعديل هنا
     required this.source,
     this.author,
     required this.title,
@@ -67,12 +60,9 @@ class NewsApiArticleModel {
 
   factory NewsApiArticleModel.fromJson(Map<String, dynamic> json) =>
       NewsApiArticleModel(
-        // <-- تم التعديل هنا
-        source: NewsApiSourceModel.fromJson(
-          json["source"],
-        ), // <-- تم التعديل هنا
+        source: NewsApiSourceModel.fromJson(json["source"]),
         author: json["author"],
-        title: json["title"] ?? "No Title", // احتياطي لو العنوان null
+        title: json["title"] ?? "No Title",
         description: json["description"],
         url: json["url"],
         urlToImage: json["urlToImage"],
@@ -93,19 +83,13 @@ class NewsApiArticleModel {
 }
 
 class NewsApiSourceModel {
-  // <-- تم التعديل هنا
-  final String? id; // خليتها تقبل null لأنها ساعات بتبقى null
+  final String? id;
   final String name;
 
-  NewsApiSourceModel({this.id, required this.name}); // <-- تم التعديل هنا
+  NewsApiSourceModel({this.id, required this.name});
 
-  factory NewsApiSourceModel.fromJson(
-    Map<String, dynamic> json,
-  ) => // <-- تم التعديل هنا
-  NewsApiSourceModel(
-    id: json["id"],
-    name: json["name"],
-  ); // <-- تم التعديل هنا
+  factory NewsApiSourceModel.fromJson(Map<String, dynamic> json) =>
+      NewsApiSourceModel(id: json["id"], name: json["name"]);
 
   Map<String, dynamic> toJson() => {"id": id, "name": name};
 }

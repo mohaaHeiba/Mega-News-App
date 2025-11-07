@@ -23,10 +23,13 @@ class NewsRepositoryImpl implements INewsRepository {
     required this.mapper,
   });
 
+  // ==============================================================
+  // Fetch top headlines by category
+  // Combines results from all APIs, maps, deduplicates, and sorts
+  // ==============================================================
   @override
-  // --- 1. ميثود جلب الأخبار (بالـ category) ---
   Future<List<Article>> getTopHeadlines({required String category}) async {
-    // هنبعت الـ category لكل واحد
+    // Fetch data from all sources in parallel
     final responses = await Future.wait([
       gNewsDataSource
           .getTopHeadlines(category: category)
@@ -39,30 +42,34 @@ class NewsRepositoryImpl implements INewsRepository {
           .catchError((_) => <NewsDataArticleModel>[]),
     ]);
 
-    // افصل النتايج "الخام"
+    // Extract raw lists
     final gnewsRaw = responses[0] as List<GNewsArticleModel>;
     final newsApiRaw = responses[1] as List<NewsApiArticleModel>;
     final newsDataRaw = responses[2] as List<NewsDataArticleModel>;
 
-    // استخدم الـ Mapper "لتنضيف" وترجمة كل list
+    // Map raw data to unified Article entities
     final gnewsArticles = gnewsRaw.map(mapper.fromGNewsModel).toList();
     final newsApiArticles = newsApiRaw.map(mapper.fromNewsApiModel).toList();
     final newsDataArticles = newsDataRaw.map(mapper.fromNewsDataModel).toList();
 
-    // ادمجهم كلهم في List واحدة
+    // Merge all lists
     final allArticles = [
       ...gnewsArticles,
       ...newsApiArticles,
       ...newsDataArticles,
     ];
 
-    // امسح المكرر ورتب
+    // Deduplicate & sort by date
     return _processAndSortArticles(allArticles);
   }
 
+  // ==============================================================
+  // Search news by keyword
+  // Performs multi-source search, maps, merges, and sorts
+  // ==============================================================
   @override
-  // --- 2. ميثود البحث (دي اللي كانت ناقصة) ---
   Future<List<Article>> searchNews(String query) async {
+    // Fetch data from all sources in parallel
     final responses = await Future.wait([
       gNewsDataSource
           .searchNews(query)
@@ -75,33 +82,35 @@ class NewsRepositoryImpl implements INewsRepository {
           .catchError((_) => <NewsDataArticleModel>[]),
     ]);
 
-    // افصل النتايج "الخام"
+    // Extract raw lists
     final gnewsRaw = responses[0] as List<GNewsArticleModel>;
     final newsApiRaw = responses[1] as List<NewsApiArticleModel>;
     final newsDataRaw = responses[2] as List<NewsDataArticleModel>;
 
-    // استخدم الـ Mapper "لتنضيف" وترجمة كل list
+    // Map raw data to unified Article entities
     final gnewsArticles = gnewsRaw.map(mapper.fromGNewsModel).toList();
     final newsApiArticles = newsApiRaw.map(mapper.fromNewsApiModel).toList();
     final newsDataArticles = newsDataRaw.map(mapper.fromNewsDataModel).toList();
 
-    // ادمجهم كلهم في List واحدة
+    // Merge all lists
     final allArticles = [
       ...gnewsArticles,
       ...newsApiArticles,
       ...newsDataArticles,
     ];
 
-    // امسح المكرر ورتب
+    // Deduplicate & sort by date
     return _processAndSortArticles(allArticles);
   }
 
-  /// ميثود خاصة للمعالجة والترتيب
+  // ==============================================================
+  // Private helper: remove duplicates & sort by newest first
+  // ==============================================================
   List<Article> _processAndSortArticles(List<Article> articles) {
-    // استخدم Set عشان تمسح المكرر (بناءً على الـ ID اللي عملناه)
+    // Remove duplicates based on article ID
     final uniqueArticles = articles.toSet().toList();
 
-    // رتب المقالات من الأحدث للأقدم
+    // Sort by publish date (descending)
     uniqueArticles.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
 
     return uniqueArticles;

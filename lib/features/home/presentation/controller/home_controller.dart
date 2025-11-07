@@ -1,76 +1,92 @@
+// lib/features/news/presentation/controllers/home_controller.dart
+
 import 'package:get/get.dart';
-import 'package:dio/dio.dart'; // 1. استدعاء Dio
+import 'package:dio/dio.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
-
-// 2. استدعاء كل الـ classes اللي عملناها (Data Layer)
 import 'package:mega_news_app/features/news/data/datasources/gnews_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsapi_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsdata_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/mappers/article_mapper.dart';
-
-// 3. استدعاء الـ Interface والـ Entity (Domain Layer)
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 import 'package:mega_news_app/features/news/domain/repositories/i_news_repository.dart';
 import 'package:mega_news_app/features/news/domain/repositories/news_repository_impl.dart';
 
 class HomeController extends GetxController {
-  // --- 1. الـ Repository ---
+  // ==============================================================
+  // Repository Instance
+  // ==============================================================
   late final INewsRepository _newsRepository;
 
-  // --- 2. الـ State Variables (زي ما هي) ---
+  // ==============================================================
+  // Reactive State Variables
+  // ==============================================================
   final isLoading = true.obs;
   final selectedCategory = 'general'.obs;
 
-  // --- 🚀 التعديل هنا ---
+  // ==============================================================
+  // ategories (for UI Tabs or Dropdown)
+  // ==============================================================
   final categories = const [
     {'label': 'General', 'value': 'general'},
     {'label': 'Sports', 'value': 'sports'},
     {'label': 'Technology', 'value': 'technology'},
     {'label': 'Business', 'value': 'business'},
     {'label': 'Health', 'value': 'health'},
-    {'label': 'Science', 'value': 'science'}, // <-- إضافة
-    {'label': 'Entertainment', 'value': 'entertainment'}, // <-- إضافة
+    {'label': 'Science', 'value': 'science'},
+    {'label': 'Entertainment', 'value': 'entertainment'},
   ];
-  // --- نهاية التعديل ---
 
-  // 4. Articles List (بيستخدم الـ Entity النضيفة بتاعتنا)
+  // ==============================================================
+  // News Articles List (Domain Entity)
+  // ==============================================================
   final articles = <Article>[].obs;
 
+  // ==============================================================
+  // Controller Initialization
+  // Manual dependency injection for now (could use Get.put later)
+  // ==============================================================
   @override
   void onInit() {
     super.onInit();
 
-    // --- 5. الـ Dependency Injection اليدوي ---
+    // Setup Dio + API client
     final dio = Dio();
     final apiClient = ApiClient(dio);
 
+    // Initialize all data sources
     final gnews = GNewsRemoteDataSourceImpl(apiClient: apiClient);
     final newsapi = NewsApiRemoteDataSourceImpl(apiClient: apiClient);
     final newsdata = NewsDataRemoteDataSourceImpl(apiClient: apiClient);
     final mapper = ArticleMapper();
 
+    // Build repository with dependencies
     _newsRepository = NewsRepositoryImpl(
       gNewsDataSource: gnews,
       newsApiDataSource: newsapi,
       newsDataDataSource: newsdata,
       mapper: mapper,
     );
-    // --- نهاية الـ Injection ---
 
-    fetchNews(); // Load initial data
+    // Fetch initial data on startup
+    fetchNews();
   }
 
-  // --- 6. Methods (تم تعديلها) ---
+  // ==============================================================
+  // Fetch News by Category
+  // Handles loading, API errors, and UI update
+  // ==============================================================
   Future<void> fetchNews() async {
     try {
       isLoading(true);
       articles.clear();
 
       final String currentCategory = selectedCategory.value;
+
       final fetchedArticles = await _newsRepository.getTopHeadlines(
         category: currentCategory,
       );
+
       articles.value = fetchedArticles;
     } on ApiException catch (e) {
       Get.snackbar('Error Loading News', e.message);
@@ -81,6 +97,9 @@ class HomeController extends GetxController {
     }
   }
 
+  // ==============================================================
+  // Change Category and Refresh
+  // ==============================================================
   void changeCategory(String newValue) {
     selectedCategory(newValue);
     fetchNews();

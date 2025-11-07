@@ -1,5 +1,3 @@
-// lib/features/news/data/mappers/article_mapper.dart
-
 import 'package:mega_news_app/features/news/data/model/gnews_response_model.dart';
 import 'package:mega_news_app/features/news/data/model/newsapi_response_model.dart';
 import 'package:mega_news_app/features/news/data/model/newsdata_response_model.dart';

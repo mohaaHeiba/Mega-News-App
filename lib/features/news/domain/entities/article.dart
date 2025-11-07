@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart'; // عشان @immutable
+import 'package:flutter/foundation.dart';
 
 @immutable
 class Article {

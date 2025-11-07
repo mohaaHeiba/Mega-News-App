@@ -2,7 +2,6 @@
 //
 //     final newsdataResponseModel = newsdataResponseModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 NewsdataResponseModel newsdataResponseModelFromJson(String str) =>
@@ -14,8 +13,8 @@ String newsdataResponseModelToJson(NewsdataResponseModel data) =>
 class NewsdataResponseModel {
   final String status;
   final int totalResults;
-  final List<NewsDataArticleModel> results; // <-- تم التعديل هنا
-  final String? nextPage; // <-- خليته يقبل null احتياطي
+  final List<NewsDataArticleModel> results;
+  final String? nextPage;
 
   NewsdataResponseModel({
     required this.status,
@@ -29,10 +28,7 @@ class NewsdataResponseModel {
         status: json["status"],
         totalResults: json["totalResults"],
         results: List<NewsDataArticleModel>.from(
-          // <-- تم التعديل هنا
-          json["results"].map(
-            (x) => NewsDataArticleModel.fromJson(x),
-          ), // <-- تم التعديل هنا
+          json["results"].map((x) => NewsDataArticleModel.fromJson(x)),
         ),
         nextPage: json["nextPage"],
       );
@@ -46,36 +42,34 @@ class NewsdataResponseModel {
 }
 
 class NewsDataArticleModel {
-  // <-- تم التعديل هنا
   final String articleId;
   final String link;
   final String title;
-  final String? description; // <-- تم التعديل هنا
-  final String? content; // <-- تم التعديل هنا
-  final List<String>? keywords; // <-- تم التعديل هنا
-  final List<String>? creator; // <-- تم التعديل هنا
-  final String? language; // <-- تم التعديل هنا
-  final List<String>? country; // <-- تم التعديل هنا
-  final List<String>? category; // <-- تم التعديل هنا
+  final String? description;
+  final String? content;
+  final List<String>? keywords;
+  final List<String>? creator;
+  final String? language;
+  final List<String>? country;
+  final List<String>? category;
   final DateTime pubDate;
-  final String? pubDateTz; // <-- تم التعديل هنا
-  final String? imageUrl; // <-- تم التعديل هنا
+  final String? pubDateTz;
+  final String? imageUrl;
   final dynamic videoUrl;
   final String sourceId;
   final String sourceName;
-  final int? sourcePriority; // <-- تم التعديل هنا
-  final String? sourceUrl; // <-- تم التعديل هنا
-  final String? sourceIcon; // <-- تم التعديل هنا
-  final String? sentiment; // <-- تم التعديل هنا
-  final String? sentimentStats; // <-- تم التعديل هنا
-  final String? aiTag; // <-- تم التعديل هنا
-  final String? aiRegion; // <-- تم التعديل هنا
-  final String? aiOrg; // <-- تم التعديل هنا
-  final String? aiSummary; // <-- تم التعديل هنا
-  final bool? duplicate; // <-- تم التعديل هنا
+  final int? sourcePriority;
+  final String? sourceUrl;
+  final String? sourceIcon;
+  final String? sentiment;
+  final String? sentimentStats;
+  final String? aiTag;
+  final String? aiRegion;
+  final String? aiOrg;
+  final String? aiSummary;
+  final bool? duplicate;
 
   NewsDataArticleModel({
-    // <-- تم التعديل هنا
     required this.articleId,
     required this.link,
     required this.title,
@@ -104,46 +98,43 @@ class NewsDataArticleModel {
     this.duplicate,
   });
 
-  factory NewsDataArticleModel.fromJson(
-    Map<String, dynamic> json,
-  ) => // <-- تم التعديل هنا
-  NewsDataArticleModel(
-    // <-- تم التعديل هنا
-    articleId: json["article_id"],
-    link: json["link"],
-    title: json["title"] ?? "No Title",
-    description: json["description"],
-    content: json["content"],
-    keywords: json["keywords"] == null
-        ? null
-        : List<String>.from(json["keywords"].map((x) => x)),
-    creator: json["creator"] == null
-        ? null
-        : List<String>.from(json["creator"].map((x) => x)),
-    language: json["language"],
-    country: json["country"] == null
-        ? null
-        : List<String>.from(json["country"].map((x) => x)),
-    category: json["category"] == null
-        ? null
-        : List<String>.from(json["category"].map((x) => x)),
-    pubDate: DateTime.parse(json["pubDate"]),
-    pubDateTz: json["pubDateTZ"],
-    imageUrl: json["image_url"],
-    videoUrl: json["video_url"],
-    sourceId: json["source_id"],
-    sourceName: json["source_name"],
-    sourcePriority: json["source_priority"],
-    sourceUrl: json["source_url"],
-    sourceIcon: json["source_icon"],
-    sentiment: json["sentiment"],
-    sentimentStats: json["sentiment_stats"],
-    aiTag: json["ai_tag"],
-    aiRegion: json["ai_region"],
-    aiOrg: json["ai_org"],
-    aiSummary: json["ai_summary"],
-    duplicate: json["duplicate"],
-  );
+  factory NewsDataArticleModel.fromJson(Map<String, dynamic> json) =>
+      NewsDataArticleModel(
+        articleId: json["article_id"],
+        link: json["link"],
+        title: json["title"] ?? "No Title",
+        description: json["description"],
+        content: json["content"],
+        keywords: json["keywords"] == null
+            ? null
+            : List<String>.from(json["keywords"].map((x) => x)),
+        creator: json["creator"] == null
+            ? null
+            : List<String>.from(json["creator"].map((x) => x)),
+        language: json["language"],
+        country: json["country"] == null
+            ? null
+            : List<String>.from(json["country"].map((x) => x)),
+        category: json["category"] == null
+            ? null
+            : List<String>.from(json["category"].map((x) => x)),
+        pubDate: DateTime.parse(json["pubDate"]),
+        pubDateTz: json["pubDateTZ"],
+        imageUrl: json["image_url"],
+        videoUrl: json["video_url"],
+        sourceId: json["source_id"],
+        sourceName: json["source_name"],
+        sourcePriority: json["source_priority"],
+        sourceUrl: json["source_url"],
+        sourceIcon: json["source_icon"],
+        sentiment: json["sentiment"],
+        sentimentStats: json["sentiment_stats"],
+        aiTag: json["ai_tag"],
+        aiRegion: json["ai_region"],
+        aiOrg: json["ai_org"],
+        aiSummary: json["ai_summary"],
+        duplicate: json["duplicate"],
+      );
 
   Map<String, dynamic> toJson() => {
     "article_id": articleId,

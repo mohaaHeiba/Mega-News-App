@@ -2,7 +2,6 @@
 //
 //     final gnewsResponseModel = gnewsResponseModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 GnewsResponseModel gnewsResponseModelFromJson(String str) =>
@@ -14,7 +13,7 @@ String gnewsResponseModelToJson(GnewsResponseModel data) =>
 class GnewsResponseModel {
   final Information information;
   final int totalArticles;
-  final List<GNewsArticleModel> articles; // <-- تم التعديل هنا
+  final List<GNewsArticleModel> articles;
 
   GnewsResponseModel({
     required this.information,
@@ -27,10 +26,7 @@ class GnewsResponseModel {
         information: Information.fromJson(json["information"]),
         totalArticles: json["totalArticles"],
         articles: List<GNewsArticleModel>.from(
-          // <-- تم التعديل هنا
-          json["articles"].map(
-            (x) => GNewsArticleModel.fromJson(x),
-          ), // <-- تم التعديل هنا
+          json["articles"].map((x) => GNewsArticleModel.fromJson(x)),
         ),
       );
 
@@ -42,7 +38,6 @@ class GnewsResponseModel {
 }
 
 class GNewsArticleModel {
-  // <-- تم التعديل هنا
   final String id;
   final String title;
   final String description;
@@ -51,10 +46,9 @@ class GNewsArticleModel {
   final String image;
   final DateTime publishedAt;
   final String lang;
-  final GNewsSourceModel source; // <-- تم التعديل هنا
+  final GNewsSourceModel source;
 
   GNewsArticleModel({
-    // <-- تم التعديل هنا
     required this.id,
     required this.title,
     required this.description,
@@ -68,7 +62,6 @@ class GNewsArticleModel {
 
   factory GNewsArticleModel.fromJson(Map<String, dynamic> json) =>
       GNewsArticleModel(
-        // <-- تم التعديل هنا
         id: json["id"],
         title: json["title"],
         description: json["description"],
@@ -77,7 +70,7 @@ class GNewsArticleModel {
         image: json["image"],
         publishedAt: DateTime.parse(json["publishedAt"]),
         lang: json["lang"],
-        source: GNewsSourceModel.fromJson(json["source"]), // <-- تم التعديل هنا
+        source: GNewsSourceModel.fromJson(json["source"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -94,14 +87,12 @@ class GNewsArticleModel {
 }
 
 class GNewsSourceModel {
-  // <-- تم التعديل هنا
   final String id;
   final String name;
   final String url;
   final String country;
 
   GNewsSourceModel({
-    // <-- تم التعديل هنا
     required this.id,
     required this.name,
     required this.url,
@@ -110,7 +101,6 @@ class GNewsSourceModel {
 
   factory GNewsSourceModel.fromJson(Map<String, dynamic> json) =>
       GNewsSourceModel(
-        // <-- تم التعديل هنا
         id: json["id"],
         name: json["name"],
         url: json["url"],
