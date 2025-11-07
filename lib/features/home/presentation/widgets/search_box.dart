@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mega_news_app/features/search/presentation/pages/show_search_page.dart';
+import 'package:mega_news_app/features/search/pages/show_search_page.dart';
 
 class SearchBox extends StatelessWidget {
   const SearchBox({super.key});

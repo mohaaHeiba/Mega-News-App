@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
-import 'package:mega_news_app/core/custom/textfileds/text_form_fileds_widget.dart';
+import 'package:mega_news_app/core/custom/text_form_fileds_widget.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/core/theme/app_theme_helper.dart';
 import 'package:mega_news_app/core/utils/app_context_helper.dart';
@@ -18,6 +18,7 @@ class CreateNewPasswordPage extends StatelessWidget {
 
     final app = AppContextHelper(context);
     final s = app.s;
+    final validator = Validator(app);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -59,7 +60,7 @@ class CreateNewPasswordPage extends StatelessWidget {
               hint: s.new_password,
               icon: Icons.lock_outline,
               isObsure: controller.isPasswordObscure,
-              validator: (value) => Validator().validatePassword(value ?? ''),
+              validator: (value) => validator.validatePassword(value ?? ''),
             ),
             AppConst.h18,
 
@@ -69,7 +70,7 @@ class CreateNewPasswordPage extends StatelessWidget {
               hint: s.confirm_new_password,
               icon: Icons.lock_outline,
               isObsure: controller.isConfirmPasswordObscure,
-              validator: (value) => Validator().validateConfirmPassword(
+              validator: (value) => validator.validateConfirmPassword(
                 controller.passController.text,
                 controller.confirmPassController.text,
               ),

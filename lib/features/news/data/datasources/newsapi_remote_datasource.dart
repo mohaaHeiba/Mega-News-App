@@ -1,4 +1,3 @@
-// lib/features/news/data/datasources/newsapi_remote_datasource.dart
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
@@ -6,7 +5,6 @@ import 'package:mega_news_app/features/news/data/model/newsapi_response_model.da
 
 abstract class INewsApiRemoteDataSource {
   Future<List<NewsApiArticleModel>> searchNews(String query);
-  // --- 🚀 1. تعديل الـ Interface ---
   Future<List<NewsApiArticleModel>> getTopHeadlines({required String category});
 }
 
@@ -20,7 +18,6 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
 
   @override
   Future<List<NewsApiArticleModel>> searchNews(String query) async {
-    // ... (الكود ده سليم زي ما هو) ...
     try {
       final responseMap = await apiClient.get(
         '$_baseUrl/everything',
@@ -38,7 +35,6 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
   }
 
   @override
-  // --- 🚀 2. تعديل الـ Method ---
   Future<List<NewsApiArticleModel>> getTopHeadlines({
     required String category,
   }) async {
@@ -49,7 +45,7 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
           'language': 'ar',
           'country': 'eg',
           'apiKey': _apiKey,
-          'category': category, // <-- 🚀 3. إضافة الـ Category هنا
+          'category': category,
         },
       );
       final responseModel = NewsapiResponseModel.fromJson(responseMap);

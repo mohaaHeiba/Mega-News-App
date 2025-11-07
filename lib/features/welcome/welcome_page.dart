@@ -42,16 +42,18 @@ class WelcomePage extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 12.0),
                     child: TextButton(
                       onPressed: () {
-                        controller.imageController.animateToPage(
-                          pages.length - 1,
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeInOut,
-                        );
-                        controller.textController.animateToPage(
-                          pages.length - 1,
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeInOut,
-                        );
+                        // controller.imageController.animateToPage(
+                        //   pages.length - 1,
+                        //   duration: const Duration(milliseconds: 400),
+                        //   curve: Curves.easeInOut,
+                        // );
+                        // controller.textController.animateToPage(
+                        //   pages.length - 1,
+                        //   duration: const Duration(milliseconds: 400),
+                        //   curve: Curves.easeInOut,
+                        // );
+
+                        Get.offNamed(AppPages.authPage);
                       },
                       child: Text(
                         s.skip,

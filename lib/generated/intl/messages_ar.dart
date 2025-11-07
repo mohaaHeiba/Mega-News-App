@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "إرسال رابط إعادة التعيين",
     ),
     "buttonSignUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "confirmPassword": MessageLookupByLibrary.simpleMessage(
+      "الرجاء تأكيد كلمة المرور",
+    ),
     "confirm_new_password": MessageLookupByLibrary.simpleMessage(
       "تأكيد كلمة المرور الجديدة",
     ),
@@ -46,6 +49,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailVerificationMessage": MessageLookupByLibrary.simpleMessage(
       "لقد أرسلنا رابط التحقق إلى ",
+    ),
+    "enterEmail": MessageLookupByLibrary.simpleMessage(
+      "الرجاء إدخال البريد الإلكتروني",
+    ),
+    "enterName": MessageLookupByLibrary.simpleMessage("الرجاء إدخال الاسم"),
+    "enterPassword": MessageLookupByLibrary.simpleMessage(
+      "الرجاء إدخال كلمة المرور",
     ),
     "enter_email": MessageLookupByLibrary.simpleMessage(
       "أدخل بريدك الإلكتروني",
@@ -67,6 +77,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "hintEmail": MessageLookupByLibrary.simpleMessage("أدخل بريدك الإلكتروني"),
     "hintFullName": MessageLookupByLibrary.simpleMessage("أدخل اسمك الكامل"),
     "hintPassword": MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
+    "invalidEmail": MessageLookupByLibrary.simpleMessage(
+      "الرجاء إدخال بريد إلكتروني صالح",
+    ),
     "labelConfirmPassword": MessageLookupByLibrary.simpleMessage(
       "تأكيد كلمة المرور",
     ),
@@ -77,12 +90,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_to_continue": MessageLookupByLibrary.simpleMessage(
       "سجّل الدخول إلى حسابك للمتابعة",
     ),
+    "nameMinChars": MessageLookupByLibrary.simpleMessage(
+      "يجب أن يكون الاسم 3 أحرف على الأقل",
+    ),
     "new_password": MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "or_continue_with": MessageLookupByLibrary.simpleMessage(
       "أو تابع باستخدام",
     ),
     "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+    "passwordMinChars": MessageLookupByLibrary.simpleMessage(
+      "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    ),
+    "passwordUpperNumber": MessageLookupByLibrary.simpleMessage(
+      "يجب أن تحتوي كلمة المرور على حرف كبير ورقم واحد على الأقل",
+    ),
+    "passwordsNotMatch": MessageLookupByLibrary.simpleMessage(
+      "كلمات المرور غير متطابقة",
+    ),
     "registerSubtitle": MessageLookupByLibrary.simpleMessage(
       "انضم إلينا وابدأ في استكشاف كل المميزات الرائعة التي نقدمها!",
     ),

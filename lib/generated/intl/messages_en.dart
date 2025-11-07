@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Send Reset Link",
     ),
     "buttonSignUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+    "confirmPassword": MessageLookupByLibrary.simpleMessage(
+      "Please confirm your password",
+    ),
     "confirm_new_password": MessageLookupByLibrary.simpleMessage(
       "Confirm New Password",
     ),
@@ -46,6 +49,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "emailVerificationMessage": MessageLookupByLibrary.simpleMessage(
       "We\'ve sent a verification link to ",
+    ),
+    "enterEmail": MessageLookupByLibrary.simpleMessage(
+      "Please enter your email address",
+    ),
+    "enterName": MessageLookupByLibrary.simpleMessage("Please enter your name"),
+    "enterPassword": MessageLookupByLibrary.simpleMessage(
+      "Please enter your password",
     ),
     "enter_email": MessageLookupByLibrary.simpleMessage("Enter your email"),
     "enter_password": MessageLookupByLibrary.simpleMessage(
@@ -69,6 +79,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter your full name",
     ),
     "hintPassword": MessageLookupByLibrary.simpleMessage("Enter your password"),
+    "invalidEmail": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid email",
+    ),
     "labelConfirmPassword": MessageLookupByLibrary.simpleMessage(
       "Confirm Password",
     ),
@@ -79,12 +92,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_to_continue": MessageLookupByLibrary.simpleMessage(
       "Log in to your account to continue",
     ),
+    "nameMinChars": MessageLookupByLibrary.simpleMessage(
+      "Name must be at least 3 characters",
+    ),
     "new_password": MessageLookupByLibrary.simpleMessage("New Password"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
     "or_continue_with": MessageLookupByLibrary.simpleMessage(
       "or continue with",
     ),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
+    "passwordMinChars": MessageLookupByLibrary.simpleMessage(
+      "Password must be at least 6 characters",
+    ),
+    "passwordUpperNumber": MessageLookupByLibrary.simpleMessage(
+      "Password must contain at least one uppercase letter and one number",
+    ),
+    "passwordsNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Passwords do not match",
+    ),
     "registerSubtitle": MessageLookupByLibrary.simpleMessage(
       "Join us and start exploring all the amazing features we offer!",
     ),

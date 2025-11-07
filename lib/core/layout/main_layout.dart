@@ -11,7 +11,7 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LayoutController());
 
-    final pages = const [HomePage()];
+    final pages = const [HomePage(), Center(), Center()];
 
     return Obx(
       () => Scaffold(

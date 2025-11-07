@@ -14,6 +14,16 @@
 
   "auth":"______________________________________",
 
+    "enterName": "Please enter your name",
+  "nameMinChars": "Name must be at least 3 characters",
+  "enterEmail": "Please enter your email address",
+  "invalidEmail": "Please enter a valid email",
+  "enterPassword": "Please enter your password",
+  "passwordMinChars": "Password must be at least 6 characters",
+  "passwordUpperNumber": "Password must contain at least one uppercase letter and one number",
+  "confirmPassword": "Please confirm your password",
+  "passwordsNotMatch": "Passwords do not match",
+
 
   "create": "Create New Password",
   "set_strong_password": "Set a strong new password to secure your account.",

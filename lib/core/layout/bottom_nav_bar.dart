@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/layout/layout_controller.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
+import 'package:mega_news_app/core/theme/app_theme_helper.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -10,16 +11,16 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LayoutController>();
-    final theme = Theme.of(context);
+    final theme = AppThemeHelper(context);
 
     return Obx(
       () => Container(
         decoration: BoxDecoration(
-          color: theme.colorScheme.background,
+          color: theme.background,
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withOpacity(0.15),
+              color: theme.colorScheme.shadow.withOpacity(0.15),
               blurRadius: 12,
               offset: const Offset(0, 3),
             ),
@@ -51,9 +52,9 @@ class BottomNavBar extends StatelessWidget {
                 _navItem(
                   index: 1,
                   controller: controller,
-                  icon: Icons.search_outlined,
-                  activeIcon: Icons.search_rounded,
-                  label: 'Search',
+                  icon: Icons.auto_awesome_outlined,
+                  activeIcon: Icons.auto_awesome_rounded,
+                  label: 'Briefing',
                 ),
 
                 _navItem(

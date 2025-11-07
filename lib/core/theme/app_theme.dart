@@ -3,7 +3,7 @@ import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/core/theme/app_gradients.dart';
 
 class AppTheme {
-  // 🌑 DARK THEME
+  // =============== Dark Theme ====================
   static final ThemeData dark = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.background,
@@ -17,11 +17,13 @@ class AppTheme {
       error: AppColors.error,
     ),
 
+    // =============== Gradients ====================
     extensions: const <ThemeExtension<dynamic>>[AppGradients.dark],
 
     cardColor: AppColors.surface,
     dialogBackgroundColor: AppColors.overlay,
 
+    // =============== Text ====================
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 48,
@@ -39,6 +41,7 @@ class AppTheme {
       labelSmall: TextStyle(fontSize: 12, color: AppColors.textFaint),
     ),
 
+    // =============== Button ====================
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -54,6 +57,7 @@ class AppTheme {
       ),
     ),
 
+    // =============== TextField ====================
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.overlay,
@@ -73,7 +77,7 @@ class AppTheme {
     ),
   );
 
-  // ☀️ LIGHT THEME
+  // =============== Light Theme ====================
   static final ThemeData light = ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.lightBackground,
@@ -87,11 +91,13 @@ class AppTheme {
       error: AppColors.error,
     ),
 
+    // =============== Gradients ====================
     extensions: <ThemeExtension<dynamic>>[AppGradients.light],
 
     cardColor: AppColors.lightSurface,
     dialogBackgroundColor: AppColors.lightOverlay,
 
+    // =============== Text ====================
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 48,
@@ -109,6 +115,7 @@ class AppTheme {
       labelSmall: TextStyle(fontSize: 12, color: AppColors.textFaintLight),
     ),
 
+    // =============== Button ====================
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -124,12 +131,11 @@ class AppTheme {
       ),
     ),
 
+    // =============== TextField ====================
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.lightOverlay,
-
       hintStyle: const TextStyle(color: AppColors.textFaintLight, fontSize: 14),
-
       labelStyle: const TextStyle(
         color: AppColors.textFaint,
         fontWeight: FontWeight.w600,
@@ -140,7 +146,6 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
-
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(color: AppColors.primary, width: 1),
@@ -156,7 +161,6 @@ class AppTheme {
           width: 0.8,
         ),
       ),
-
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
-import 'package:mega_news_app/core/custom/textfileds/text_form_fileds_widget.dart';
+import 'package:mega_news_app/core/custom/text_form_fileds_widget.dart';
 import 'package:mega_news_app/core/theme/app_theme_helper.dart';
 import 'package:mega_news_app/core/utils/app_context_helper.dart';
 import 'package:mega_news_app/core/utils/validator.dart';
@@ -16,6 +16,7 @@ class LoginPage extends StatelessWidget {
     final appTheme = AppThemeHelper(context);
     final app = AppContextHelper(context);
     final s = app.s;
+    final validator = Validator(app);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
             hint: s.enter_email,
             icon: Icons.email_outlined,
             inputType: TextInputType.emailAddress,
-            validator: (value) => Validator().validateEmail(value ?? ''),
+            validator: (value) => validator.validateEmail(value ?? ''),
           ),
           AppConst.h18,
 
@@ -72,7 +73,7 @@ class LoginPage extends StatelessWidget {
             hint: s.enter_password,
             icon: Icons.lock_outline,
             isObsure: controller.isPasswordObscure,
-            validator: (value) => Validator().validatePassword(value ?? ''),
+            validator: (value) => validator.validatePassword(value ?? ''),
           ),
 
           // Forgot Password

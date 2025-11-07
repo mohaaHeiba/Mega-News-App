@@ -5,7 +5,7 @@ import 'package:flutter/material.dart'
 import 'package:get/get.dart';
 import 'package:mega_news_app/features/home/presentation/widgets/article_tile.dart';
 // اتأكد إن الـ path ده صح (المكان الجديد بعد النقل)
-import 'package:mega_news_app/features/search/presentation/controller/search_controller.dart';
+import 'package:mega_news_app/features/search/controller/search_controller.dart';
 
 class ShowSearchPage extends StatelessWidget {
   const ShowSearchPage({super.key});

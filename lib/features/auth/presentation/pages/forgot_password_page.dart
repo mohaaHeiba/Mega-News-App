@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
-import 'package:mega_news_app/core/custom/textfileds/text_form_fileds_widget.dart';
+import 'package:mega_news_app/core/custom/text_form_fileds_widget.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/core/theme/app_theme_helper.dart';
 import 'package:mega_news_app/core/utils/app_context_helper.dart';
@@ -17,6 +17,7 @@ class ForgotPasswordPage extends StatelessWidget {
     final appTheme = AppThemeHelper(context);
     final app = AppContextHelper(context);
     final s = app.s;
+    final validator = Validator(app);
 
     return SingleChildScrollView(
       child: Align(
@@ -63,7 +64,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 hint: s.hintEmail,
                 icon: Icons.email_outlined,
                 inputType: TextInputType.emailAddress,
-                validator: (value) => Validator().validateEmail(value ?? ''),
+                validator: (value) => validator.validateEmail(value ?? ''),
               ),
               AppConst.h24,
 

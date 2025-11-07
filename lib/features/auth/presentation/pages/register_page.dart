@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/constants/app_const.dart';
-import 'package:mega_news_app/core/custom/textfileds/text_form_fileds_widget.dart';
+import 'package:mega_news_app/core/custom/text_form_fileds_widget.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/core/theme/app_theme_helper.dart';
 import 'package:mega_news_app/core/utils/app_context_helper.dart';
@@ -17,6 +17,7 @@ class RegisterPage extends StatelessWidget {
     final appTheme = AppThemeHelper(context);
     final app = AppContextHelper(context);
     final s = app.s;
+    final validator = Validator(app);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
@@ -59,7 +60,7 @@ class RegisterPage extends StatelessWidget {
             label: s.labelFullName,
             icon: Icons.person_outline,
             validator: (value) =>
-                Validator().validateName(controller.nameController.text),
+                validator.validateName(controller.nameController.text),
           ),
           AppConst.h18,
 
@@ -71,7 +72,7 @@ class RegisterPage extends StatelessWidget {
             icon: Icons.email_outlined,
             inputType: TextInputType.emailAddress,
             validator: (value) =>
-                Validator().validateEmail(controller.emailController.text),
+                validator.validateEmail(controller.emailController.text),
           ),
           AppConst.h18,
 
@@ -83,7 +84,7 @@ class RegisterPage extends StatelessWidget {
             icon: Icons.lock_outline,
             isObsure: controller.isPasswordObscure,
             validator: (value) =>
-                Validator().validatePassword(controller.passController.text),
+                validator.validatePassword(controller.passController.text),
           ),
           AppConst.h18,
 
@@ -94,7 +95,7 @@ class RegisterPage extends StatelessWidget {
             label: s.labelConfirmPassword,
             icon: Icons.lock_outline,
             isObsure: controller.isConfirmPasswordObscure,
-            validator: (value) => Validator().validateConfirmPassword(
+            validator: (value) => validator.validateConfirmPassword(
               controller.passController.text,
               controller.confirmPassController.text,
             ),

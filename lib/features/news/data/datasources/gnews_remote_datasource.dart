@@ -1,4 +1,3 @@
-// lib/features/news/data/datasources/gnews_remote_datasource.dart
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
@@ -6,7 +5,6 @@ import 'package:mega_news_app/features/news/data/model/gnews_response_model.dart
 
 abstract class IGNewsRemoteDataSource {
   Future<List<GNewsArticleModel>> searchNews(String query);
-  // --- 🚀 1. تعديل الـ Interface ---
   Future<List<GNewsArticleModel>> getTopHeadlines({required String category});
 }
 
@@ -20,7 +18,6 @@ class GNewsRemoteDataSourceImpl implements IGNewsRemoteDataSource {
 
   @override
   Future<List<GNewsArticleModel>> searchNews(String query) async {
-    // ... (الكود ده سليم زي ما هو) ...
     try {
       final responseMap = await apiClient.get(
         '$_baseUrl/search',
@@ -38,7 +35,6 @@ class GNewsRemoteDataSourceImpl implements IGNewsRemoteDataSource {
   }
 
   @override
-  // --- 🚀 2. تعديل الـ Method ---
   Future<List<GNewsArticleModel>> getTopHeadlines({
     required String category,
   }) async {
@@ -49,7 +45,7 @@ class GNewsRemoteDataSourceImpl implements IGNewsRemoteDataSource {
           'lang': 'ar',
           'country': 'eg',
           'apikey': _apiKey,
-          'topic': category, // <-- 🚀 3. إضافة الـ Category هنا
+          'topic': category,
         },
       );
       final responseModel = GnewsResponseModel.fromJson(responseMap);

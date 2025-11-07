@@ -6,7 +6,8 @@ import 'package:mega_news_app/features/news/data/model/newsdata_response_model.d
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 
 class ArticleMapper {
-  // --- 1. ميثود تحويل GNews ---
+  // =============== convert Genew ==================
+
   Article fromGNewsModel(GNewsArticleModel model) {
     return Article(
       id: '${model.source.name}_${model.url}',
@@ -19,28 +20,28 @@ class ArticleMapper {
     );
   }
 
-  // --- 2. ميثود تحويل NewsAPI ---
+  // =============== convert NewsApi ==================
   Article fromNewsApiModel(NewsApiArticleModel model) {
     return Article(
       id: '${model.source.name}_${model.url}',
       title: model.title,
       description: model.description,
-      imageUrl: model.urlToImage, // <-- هنا بنوحد الأسماء
+      imageUrl: model.urlToImage,
       sourceName: model.source.name,
       articleUrl: model.url,
       publishedAt: model.publishedAt,
     );
   }
 
-  // --- 3. ميثود تحويل NewsData ---
+  // =============== convert NewsData ==================
   Article fromNewsDataModel(NewsDataArticleModel model) {
     return Article(
       id: '${model.sourceName}_${model.link}',
       title: model.title,
       description: model.description,
-      imageUrl: model.imageUrl, // <-- هنا بنوحد الأسماء
+      imageUrl: model.imageUrl,
       sourceName: model.sourceName,
-      articleUrl: model.link, // <-- هنا بنوحد الأسماء
+      articleUrl: model.link,
       publishedAt: model.pubDate,
     );
   }

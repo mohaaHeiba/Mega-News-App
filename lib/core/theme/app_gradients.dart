@@ -12,27 +12,27 @@ class AppGradients extends ThemeExtension<AppGradients> {
     required this.overlay,
   });
 
-  // 🌑 Dark Theme Gradients
+  // ================= Dark Theme Gradients ====================
   static const AppGradients dark = AppGradients(
     logo: LinearGradient(
       colors: [AppColors.primary, AppColors.primaryDark, Colors.white],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-    ),
+    ), // Logo gradient
     background: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [AppColors.background, AppColors.surface, AppColors.overlay],
-    ),
+    ), // Background gradient
     overlay: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [AppColors.overlay, AppColors.surface, AppColors.background],
       stops: [0.0, 0.6, 1.0],
-    ),
+    ), // Overlay gradient
   );
 
-  // ☀️ Light Theme Gradients
+  // ================= Light Theme Gradients ====================
   static final AppGradients light = AppGradients(
     logo: const LinearGradient(
       colors: [
@@ -42,7 +42,7 @@ class AppGradients extends ThemeExtension<AppGradients> {
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-    ),
+    ), // Logo gradient
     background: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -51,7 +51,7 @@ class AppGradients extends ThemeExtension<AppGradients> {
         AppColors.lightSurface,
         AppColors.lightOverlay,
       ],
-    ),
+    ), // Background gradient
     overlay: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -61,9 +61,10 @@ class AppGradients extends ThemeExtension<AppGradients> {
         AppColors.lightBackground.withOpacity(0.9),
       ],
       stops: const [0.0, 0.5, 1.0],
-    ),
+    ), // Overlay gradient
   );
 
+  // =============== Copy & Lerp ====================
   @override
   AppGradients copyWith({
     LinearGradient? logo,
