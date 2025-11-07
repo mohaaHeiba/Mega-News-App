@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
@@ -26,7 +25,7 @@ Future<void> fetchNewsInBackground(ServiceInstance service) async {
   try {
     // Initialize GetStorage
     await GetStorage.init();
-    
+
     // Get API keys from storage (stored during app initialization)
     final storage = GetStorage();
     final gnewsApiKey = storage.read<String>('GNEWS_API') ?? '';
@@ -40,7 +39,7 @@ Future<void> fetchNewsInBackground(ServiceInstance service) async {
       // If dotenv fails, that's okay - we'll use stored values
       print('Could not load .env in background, using stored values');
     }
-    
+
     // Always override with stored values to ensure they're available
     // This ensures API keys work even if .env file isn't accessible in background
     if (gnewsApiKey.isNotEmpty) {
@@ -85,9 +84,7 @@ Future<void> fetchNewsInBackground(ServiceInstance service) async {
     }
 
     // Fetch latest news (general category)
-    final articles = await newsRepository.getTopHeadlines(
-      category: 'general',
-    );
+    final articles = await newsRepository.getTopHeadlines(category: 'general');
 
     if (articles.isEmpty) {
       if (service is AndroidServiceInstance) {
@@ -123,9 +120,7 @@ Future<void> fetchNewsInBackground(ServiceInstance service) async {
       }).toList();
 
       // Show notifications
-      await notificationService.showMultipleNewsNotifications(
-        notificationData,
-      );
+      await notificationService.showMultipleNewsNotifications(notificationData);
 
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
@@ -180,7 +175,7 @@ class BackgroundService {
   static Future<void> start() async {
     final service = FlutterBackgroundService();
     bool isRunning = await service.isRunning();
-    
+
     if (!isRunning) {
       await service.startService();
     }
@@ -190,7 +185,7 @@ class BackgroundService {
   static Future<void> stop() async {
     final service = FlutterBackgroundService();
     bool isRunning = await service.isRunning();
-    
+
     if (isRunning) {
       service.invoke("stopService");
     }

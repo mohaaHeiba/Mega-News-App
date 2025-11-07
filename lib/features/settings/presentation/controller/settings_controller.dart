@@ -11,17 +11,32 @@ class SettingsController extends GetxController {
   final notificationsEnabled = true.obs;
   final breakingNewsEnabled = true.obs;
   final language = 'en'.obs;
-  final fontSize = 'medium'.obs; // small, medium, large
+
+  // PageController
+  late final PageController pageController;
+
+  // Current page index
+  final currentPage = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     _loadSettings();
+
+    // Initialize PageController
+    pageController = PageController(initialPage: 0);
+
     // Defer theme and locale application until after build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _applyTheme();
       _applyLocale();
     });
+  }
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 
   void _loadSettings() {
@@ -34,11 +49,10 @@ class SettingsController extends GetxController {
       );
     }
     isDark.value = storage.read('isDark') ?? false;
-    
+
     notificationsEnabled.value = storage.read('notifications') ?? true;
     breakingNewsEnabled.value = storage.read('breakingNews') ?? true;
     language.value = storage.read('language') ?? 'en';
-    fontSize.value = storage.read('fontSize') ?? 'medium';
   }
 
   void _applyTheme() {
@@ -87,9 +101,14 @@ class SettingsController extends GetxController {
     _applyLocale();
   }
 
-  void setFontSize(String size) {
-    fontSize.value = size;
-    storage.write('fontSize', size);
+  // Navigate to specific page
+  void setPage(int index) {
+    currentPage.value = index;
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   Future<void> clearCache() async {
@@ -100,17 +119,21 @@ class SettingsController extends GetxController {
     final savedNotifications = storage.read('notifications');
     final savedBreakingNews = storage.read('breakingNews');
     final savedFontSize = storage.read('fontSize');
-    
+
     await storage.erase();
-    
+
     // Restore important settings
     if (loginBefore != null) storage.write('loginBefore', loginBefore);
     if (savedThemeMode != null) storage.write('themeMode', savedThemeMode);
     if (savedLanguage != null) storage.write('language', savedLanguage);
-    if (savedNotifications != null) storage.write('notifications', savedNotifications);
-    if (savedBreakingNews != null) storage.write('breakingNews', savedBreakingNews);
+    if (savedNotifications != null) {
+      storage.write('notifications', savedNotifications);
+    }
+    if (savedBreakingNews != null) {
+      storage.write('breakingNews', savedBreakingNews);
+    }
     if (savedFontSize != null) storage.write('fontSize', savedFontSize);
-    
+
     Get.snackbar(
       'Cache Cleared',
       'Cache has been cleared successfully',
