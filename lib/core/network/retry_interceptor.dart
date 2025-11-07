@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:dio/dio.dart';
 
-/// Interceptor that retries failed requests with exponential backoff
-/// Specifically handles 429 (Rate Limit) errors
 class RetryInterceptor extends Interceptor {
   final int maxRetries;
   final Duration baseDelay;
@@ -18,30 +16,26 @@ class RetryInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final statusCode = err.response?.statusCode;
-    
-    // Never retry authentication/authorization errors (401, 403)
-    // These require user action (check API key) and won't succeed on retry
+
     if (statusCode == 401 || statusCode == 403) {
       super.onError(err, handler);
       return;
     }
-    
-    // Only retry on rate limit errors (429) or network errors
-    if (statusCode == 429 || 
+
+    if (statusCode == 429 ||
         err.type == DioExceptionType.connectionTimeout ||
         err.type == DioExceptionType.sendTimeout ||
         err.type == DioExceptionType.receiveTimeout ||
         err.type == DioExceptionType.connectionError) {
-      
       final retryCount = err.requestOptions.extra['retryCount'] as int? ?? 0;
-      
+
       if (retryCount < maxRetries) {
-        // Calculate exponential backoff with jitter
         final delay = _calculateDelay(retryCount);
-        
+
         // Check for Retry-After header (429 responses)
         Duration? retryAfter;
-        if (statusCode == 429 && err.response?.headers.value('retry-after') != null) {
+        if (statusCode == 429 &&
+            err.response?.headers.value('retry-after') != null) {
           final retryAfterSeconds = int.tryParse(
             err.response!.headers.value('retry-after')!,
           );
@@ -49,18 +43,20 @@ class RetryInterceptor extends Interceptor {
             retryAfter = Duration(seconds: retryAfterSeconds);
           }
         }
-        
+
         // Use Retry-After if available, otherwise use exponential backoff
         final waitTime = retryAfter ?? delay;
-        
+
         // Log retry attempt
-        print('🔄 Retrying request (attempt ${retryCount + 1}/$maxRetries) after ${waitTime.inSeconds}s...');
-        
+        print(
+          '🔄 Retrying request (attempt ${retryCount + 1}/$maxRetries) after ${waitTime.inSeconds}s...',
+        );
+
         await Future.delayed(waitTime);
-        
+
         // Update retry count
         err.requestOptions.extra['retryCount'] = retryCount + 1;
-        
+
         // Retry the request using the same Dio instance
         try {
           // Use the Dio instance from the interceptor or create a new one
@@ -82,7 +78,7 @@ class RetryInterceptor extends Interceptor {
         print('❌ Max retries ($maxRetries) reached. Giving up.');
       }
     }
-    
+
     // Don't retry, pass error to next handler
     super.onError(err, handler);
   }
@@ -97,4 +93,3 @@ class RetryInterceptor extends Interceptor {
     return exponentialDelay + jitter;
   }
 }
-

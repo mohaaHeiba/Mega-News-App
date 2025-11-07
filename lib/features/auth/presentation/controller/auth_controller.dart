@@ -12,6 +12,7 @@ import 'package:mega_news_app/features/auth/data/auth_local.dart';
 import 'package:mega_news_app/features/auth/data/auth_service.dart';
 import 'package:mega_news_app/features/auth/domain/entity/auth_entity.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/email_verification_page.dart';
+import 'package:mega_news_app/features/favorites/presentation/controller/favorites_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController extends GetxController {
@@ -158,9 +159,18 @@ class AuthController extends GetxController {
 
       await localAuth.saveAuthData(authEntity);
 
+      // Sync favorites after login
+      try {
+        final favoritesController = Get.find<FavoritesController>();
+        await favoritesController.onUserLogin();
+      } catch (e) {
+        // Favorites controller might not be initialized yet, ignore
+        print('Could not sync favorites on login: $e');
+      }
+
       customSnackbar(
         title: 'Welcome Back!',
-        message: 'You’ve signed in successfully.',
+        message: 'You\'ve signed in successfully.',
         color: AppColors.success,
       );
     } on NetworkAppException {
@@ -210,6 +220,16 @@ class AuthController extends GetxController {
       );
 
       await localAuth.saveAuthData(authEntity);
+
+      // Sync favorites after login
+      try {
+        final favoritesController = Get.find<FavoritesController>();
+        await favoritesController.onUserLogin();
+      } catch (e) {
+        // Favorites controller might not be initialized yet, ignore
+        print('Could not sync favorites on login: $e');
+      }
+
       customSnackbar(
         title: 'Welcome!',
         message: 'Signed in successfully with Google.',
@@ -249,6 +269,15 @@ class AuthController extends GetxController {
 
       await auth.logout();
       await localAuth.clearAuthData();
+
+      // Clear user-specific favorites on logout
+      try {
+        final favoritesController = Get.find<FavoritesController>();
+        favoritesController.onUserLogout();
+      } catch (e) {
+        // Favorites controller might not be initialized yet, ignore
+        print('Could not clear favorites on logout: $e');
+      }
 
       customSnackbar(
         title: 'Logged Out',
@@ -299,6 +328,15 @@ class AuthController extends GetxController {
 
       await auth.deleteAccount(currentUser.id);
       await localAuth.clearAuthData();
+
+      // Clear user-specific favorites on account deletion
+      try {
+        final favoritesController = Get.find<FavoritesController>();
+        favoritesController.onUserLogout();
+      } catch (e) {
+        // Favorites controller might not be initialized yet, ignore
+        print('Could not clear favorites on account deletion: $e');
+      }
 
       customSnackbar(
         title: 'Account Deleted',
@@ -442,6 +480,16 @@ class AuthController extends GetxController {
       if (event == AuthChangeEvent.signedIn && user != null) {
         if (user.emailConfirmedAt != null) {
           GetStorage().write('loginBefore', true);
+          // Sync favorites after successful sign in
+          try {
+            final favoritesController = Get.find<FavoritesController>();
+            favoritesController.onUserLogin().catchError((e) {
+              print('Could not sync favorites on auth state change: $e');
+            });
+          } catch (e) {
+            // Favorites controller might not be initialized yet, ignore
+            print('Could not sync favorites on auth state change: $e');
+          }
           Get.offAllNamed(AppPages.loyoutPage);
         }
       }

@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
-import 'package:mega_news_app/core/services/error_handler_service.dart';
+import 'package:mega_news_app/core/service/error_handler_service.dart';
 import 'package:mega_news_app/core/utils/logger.dart';
 import 'package:mega_news_app/generated/l10n.dart';
 
@@ -158,7 +158,7 @@ class SearchController extends GetxController {
       articles.clear();
       final fetchedArticles = await _newsRepository.searchNews(query);
       articles.value = fetchedArticles;
-      
+
       // Show message if no results found
       if (fetchedArticles.isEmpty) {
         final s = S.current;
@@ -192,10 +192,7 @@ class SearchController extends GetxController {
   Future<void> summarizeSearchResults() async {
     if (articles.isEmpty) {
       final s = S.current;
-      Get.snackbar(
-        s.noResults,
-        s.searchForArticlesFirst,
-      );
+      Get.snackbar(s.noResults, s.searchForArticlesFirst);
       return;
     }
 

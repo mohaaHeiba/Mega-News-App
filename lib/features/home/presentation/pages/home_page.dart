@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
           // =======================================================
           final articles = ctrl.articles;
           return RefreshIndicator(
-            onRefresh: ctrl.fetchNews,
+            onRefresh: () => ctrl.fetchNews(forceRefresh: true),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
