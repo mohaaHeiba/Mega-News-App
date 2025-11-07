@@ -1,8 +1,13 @@
+// lib/features/news/presentation/widgets/article_tile.dart
+// (ده الملف اللي كان في home/presentation/widgets واتنقل)
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mega_news_app/features/home/domain/entities/article.dart';
-// ستحتاج لإنشاء هذه الصفحة لاحقاً
-import 'package:mega_news_app/features/home/presentation/widgets/article_detail_page.dart';
+import 'package:mega_news_app/features/news/domain/entities/article.dart';
+// 1. استدعاء Timeago
+// 2. استدعاء صفحة التفاصيل من مكانها الجديد
+import 'package:mega_news_app/features/article_detail/presentation/pages/article_detail_page.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ArticleTile extends StatelessWidget {
   final Article article;
@@ -16,7 +21,6 @@ class ArticleTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          // Navigate to detail page
           Get.to(() => ArticleDetailPage(article: article));
         },
         child: Padding(
@@ -26,9 +30,11 @@ class ArticleTile extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Hero(
-                  tag: article.title, // Tag للـ Hero animation
+                  // 3. تعديل الـ Tag
+                  tag: article.id,
                   child: Image.network(
-                    article.image,
+                    // 4. تعديل الـ Image
+                    article.imageUrl ?? '', // Handle null image
                     width: 110,
                     height: 72,
                     fit: BoxFit.cover,
@@ -55,10 +61,10 @@ class ArticleTile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    // Summary is hidden in your original screenshot, but I'm keeping it
                     Text(
-                      article.summary,
-                      maxLines: 1, // سطر واحد فقط
+                      // 5. تعديل الـ Summary
+                      article.description ?? '', // Handle null description
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
@@ -72,7 +78,8 @@ class ArticleTile extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          article.time,
+                          // 6. تعديل الـ Time
+                          timeago.format(article.publishedAt),
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 12,

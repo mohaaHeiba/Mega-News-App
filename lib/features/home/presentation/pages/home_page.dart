@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/features/home/presentation/controller/home_controller.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/ArticleTile.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/FeaturedCarousel.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/Search_box.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/article_tile.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/slider/carousel_slider_widget.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/search_box.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/build_shimmer_list.dart';
 import 'package:mega_news_app/features/home/presentation/widgets/category_chip.dart';
 import 'package:shimmer/shimmer.dart';
-// تأكد من وجود الكنترولر والـ entity الذي أرسلته في الرد السابق
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // استخدم Get.put إذا كانت هذه أول مرة تستدعي فيها الكنترولر
-    // استخدم Get.find إذا تم عمل put له في مكان آخر (مثل ملف الـ bindings)
     final HomeController ctrl = Get.put(HomeController());
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        // استخدمت Text بدلاً من الشعار كحل مؤقت
-        title: const Text(
-          'Mega News',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.png', width: 50),
+            const Text(
+              'Mega News',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(icon: const Icon(Icons.bookmark_border), onPressed: () {}),
-        ],
       ),
       body: SafeArea(
         child: Obx(() {
-          // --- حالة التحميل (Loading State) ---
           if (ctrl.isLoading.value) {
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -84,7 +82,7 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  _buildShimmerList(), // Shimmer list
+                  buildShimmerList(), // Shimmer list
                 ],
               ),
             );
@@ -133,7 +131,7 @@ class HomePage extends StatelessWidget {
                   Text('Featured', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   // نعرض أول 5 مقالات فقط في الـ carousel
-                  FeaturedCarousel(articles: articles.take(5).toList()),
+                  CarouselSliderWidget(articles: articles.take(5).toList()),
                   const SizedBox(height: 20),
 
                   // 🕓 Latest
@@ -167,53 +165,6 @@ class HomePage extends StatelessWidget {
           );
         }),
       ),
-    );
-  }
-
-  // ويدجت مساعدة لبناء الـ Shimmer List
-  Widget _buildShimmerList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Material(
-            borderRadius: BorderRadius.circular(12),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 110,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(height: 14, color: Colors.white),
-                        const SizedBox(height: 8),
-                        Container(height: 12, color: Colors.white),
-                        const SizedBox(height: 8),
-                        Container(height: 12, width: 80, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }

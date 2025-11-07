@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/show_search_page.dart';
-// ستحتاج لإنشاء هذه الصفحة لاحقاً
+import 'package:mega_news_app/features/search/presentation/pages/show_search_page.dart';
 
 class SearchBox extends StatelessWidget {
   const SearchBox({super.key});
@@ -11,12 +10,11 @@ class SearchBox extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
-        // للانتقال لصفحة البحث
         Get.to(() => const ShowSearchPage());
       },
       child: Container(
         decoration: BoxDecoration(
-          color: theme.cardColor, // لون الكارت
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -35,7 +33,7 @@ class SearchBox extends StatelessWidget {
               child: Text(
                 'Search news, topics, or sources',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.hintColor, // لون النص التلميحي
+                  color: theme.hintColor,
                 ),
               ),
             ),

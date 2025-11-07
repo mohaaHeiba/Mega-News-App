@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mega_news_app/core/custom/custom_snackbar.dart';
-import 'package:mega_news_app/core/errors/app_exception.dart';
+import 'package:mega_news_app/core/errors/supabase_exception.dart';
 import 'package:mega_news_app/core/routes/app_pages.dart';
 import 'package:mega_news_app/core/service/network_service.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';

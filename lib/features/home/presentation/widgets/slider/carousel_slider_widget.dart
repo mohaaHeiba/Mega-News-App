@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mega_news_app/features/home/domain/entities/article.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/FeaturedArticle.dart';
+import 'package:mega_news_app/features/news/domain/entities/article.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/slider/FeaturedArticle.dart';
 
-class FeaturedCarousel extends StatelessWidget {
+class CarouselSliderWidget extends StatelessWidget {
   final List<Article> articles;
-  const FeaturedCarousel({super.key, required this.articles});
+  const CarouselSliderWidget({super.key, required this.articles});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +18,9 @@ class FeaturedCarousel extends StatelessWidget {
       child: CarouselSlider(
         options: CarouselOptions(
           height: 200,
-          viewportFraction: 1.0, // عرض العنصر يملأ الشاشة
-          autoPlay: enableAuto, // تشغيل آلي لو أكثر من عنصر
-          enableInfiniteScroll: enableAuto, // تكرار لا نهائي
+          viewportFraction: 1.0,
+          autoPlay: enableAuto,
+          enableInfiniteScroll: enableAuto,
         ),
         items: articles.map((a) => FeaturedArticle(article: a)).toList(),
       ),

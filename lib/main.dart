@@ -24,7 +24,7 @@ Future<void> main() async {
   //load theme adn state
   await GetStorage.init();
 
-  GetStorage().erase();
+  // GetStorage().erase();
 
   Get.lazyPut(() => WelcomeController());
 

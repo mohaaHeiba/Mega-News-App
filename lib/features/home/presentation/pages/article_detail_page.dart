@@ -1,5 +1,8 @@
+// lib/features/article_detail/presentation/pages/article_detail_page.dart
 import 'package:flutter/material.dart';
-import 'package:mega_news_app/features/home/domain/entities/article.dart';
+import 'package:mega_news_app/features/news/domain/entities/article.dart';
+// 1. استدعاء Timeago
+import 'package:timeago/timeago.dart' as timeago;
 
 class ArticleDetailPage extends StatelessWidget {
   final Article article;
@@ -10,7 +13,8 @@ class ArticleDetailPage extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(article.source),
+        // 2. تعديل الـ Source
+        title: Text(article.sourceName),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -18,14 +22,20 @@ class ArticleDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hero animation for the image
             Hero(
-              tag: article.title, // Must match the tag in ArticleTile
+              // 3. تعديل الـ Tag
+              tag: article.id,
               child: Image.network(
-                article.image,
+                // 4. تعديل الـ Image
+                article.imageUrl ?? '', // Handle null
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  height: 250,
+                  color: Colors.grey.shade200,
+                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                ),
               ),
             ),
             Padding(
@@ -49,7 +59,8 @@ class ArticleDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${article.time}  •  ${article.source}',
+                        // 5. تعديل الوقت والـ Source
+                        '${timeago.format(article.publishedAt)}  •  ${article.sourceName}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: Colors.grey,
                         ),
@@ -58,8 +69,9 @@ class ArticleDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    // Using summary as placeholder for full content
-                    '${article.summary}\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                    // 6. تعديل الـ Summary وإلغاء الـ Lorem Ipsum
+                    article.description ??
+                        'No content available for this article.',
                     style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16),
                   ),
                 ],

@@ -1,5 +1,9 @@
+// lib/features/home/presentation/widgets/slider/FeaturedArticle.dart
 import 'package:flutter/material.dart';
-import 'package:mega_news_app/features/home/domain/entities/article.dart';
+import 'package:get/get.dart';
+import 'package:mega_news_app/features/news/domain/entities/article.dart';
+// 1. استدعاء صفحة التفاصيل من مكانها الجديد
+import 'package:mega_news_app/features/article_detail/presentation/pages/article_detail_page.dart';
 
 class FeaturedArticle extends StatelessWidget {
   final Article article;
@@ -10,28 +14,31 @@ class FeaturedArticle extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
-        // يمكنك أيضاً إضافة انتقال لصفحة التفاصيل من هنا
-        // Get.to(() => ArticleDetailPage(article: article));
+        Get.to(() => ArticleDetailPage(article: article));
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4.0), // هامش بسيط
+        margin: const EdgeInsets.symmetric(horizontal: 4.0),
         height: 200,
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // الصورة
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                article.image,
-                fit: BoxFit.cover,
-                errorBuilder: (context, _, __) => Container(
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.broken_image, color: Colors.grey),
+            // 2. إضافة Hero
+            Hero(
+              tag: article.id,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  // 3. تعديل الـ Image
+                  article.imageUrl ?? '', // Handle null
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, _, __) => Container(
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  ),
                 ),
               ),
             ),
-            // تدرج لوني لتمييز النص
+            // ... (باقي الكود زي ما هو) ...
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -42,7 +49,6 @@ class FeaturedArticle extends StatelessWidget {
                 ),
               ),
             ),
-            // النص
             Positioned(
               left: 12,
               right: 12,

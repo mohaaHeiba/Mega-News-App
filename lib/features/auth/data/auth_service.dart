@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mega_news_app/core/errors/app_exception.dart';
+import 'package:mega_news_app/core/errors/supabase_exception.dart';
 import 'package:mega_news_app/core/service/network_service.dart';
 import 'package:mega_news_app/features/auth/domain/model/auth_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

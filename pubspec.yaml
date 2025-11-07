@@ -51,6 +51,9 @@ dependencies:
 
   flutter_localizations:
         sdk: flutter
+  timeago: ^3.7.1
+  url_launcher: ^6.3.2
+  palette_generator: ^0.3.3+7
 
 dev_dependencies:
   flutter_test:
