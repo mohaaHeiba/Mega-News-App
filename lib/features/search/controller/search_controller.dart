@@ -10,6 +10,9 @@ import 'package:dio/dio.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
+import 'package:mega_news_app/core/services/error_handler_service.dart';
+import 'package:mega_news_app/core/utils/logger.dart';
+import 'package:mega_news_app/generated/l10n.dart';
 
 // 1. استدعاء كل الـ classes اللي عملناها (Data Layer)
 import 'package:mega_news_app/features/news/data/datasources/gnews_remote_datasource.dart';
@@ -26,7 +29,6 @@ import 'package:mega_news_app/features/news/domain/repositories/news_repository_
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:mega_news_app/features/gemini/data/datasources/gemini_remote_datasource.dart';
 import 'package:mega_news_app/features/gemini/data/repositories/gemini_repository_impl.dart';
-import 'package:mega_news_app/features/gemini/domain/repositories/i_gemini_repository.dart';
 import 'package:mega_news_app/features/gemini/domain/usecases/get_ai_summary_usecase.dart';
 // --- 🚀 4. استدعاء صفحة التفاصيل ---
 
@@ -156,10 +158,31 @@ class SearchController extends GetxController {
       articles.clear();
       final fetchedArticles = await _newsRepository.searchNews(query);
       articles.value = fetchedArticles;
+      
+      // Show message if no results found
+      if (fetchedArticles.isEmpty) {
+        final s = S.current;
+        Get.snackbar(
+          s.noResults,
+          'Try a different search term',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        AppLogger.info('Found ${fetchedArticles.length} articles');
+      }
     } on ApiException catch (e) {
-      Get.snackbar('Error Searching', e.message);
+      // Use ErrorHandlerService for consistent error handling
+      ErrorHandlerService.handleError(
+        e,
+        customMessage: S.current.errorSearching,
+      );
     } catch (e) {
-      Get.snackbar('An error occurred', e.toString());
+      // Handle unexpected errors
+      ErrorHandlerService.handleError(
+        e,
+        customMessage: S.current.anErrorOccurred,
+      );
     } finally {
       isLoading(false);
     }
@@ -168,9 +191,10 @@ class SearchController extends GetxController {
   // --- 🚀 8. ميثود طلب التلخيص (النضيفة) ---
   Future<void> summarizeSearchResults() async {
     if (articles.isEmpty) {
+      final s = S.current;
       Get.snackbar(
-        'No Results',
-        'Search for articles first to summarize them.',
+        s.noResults,
+        s.searchForArticlesFirst,
       );
       return;
     }
@@ -185,7 +209,7 @@ class SearchController extends GetxController {
       // 🚀 9. بنكلم الـ UseCase ونبعتله النتايج الحالية
       final summary = await _getAiSummaryUseCase.call(
         topic: searchQuery.value,
-        articles: articles.value,
+        articles: articles.toList(),
       );
 
       Get.back(); // إغلاق شاشة التحميل
@@ -199,11 +223,13 @@ class SearchController extends GetxController {
         ),
       );
     } on ApiException catch (e) {
+      final s = S.current;
       Get.back();
-      Get.snackbar('Summarization Failed', e.message);
+      Get.snackbar(s.summarizationFailed, e.message);
     } catch (e) {
+      final s = S.current;
       Get.back();
-      Get.snackbar('Summarization Failed', e.toString());
+      Get.snackbar(s.summarizationFailed, e.toString());
     } finally {
       isSummarizing.value = false;
     }

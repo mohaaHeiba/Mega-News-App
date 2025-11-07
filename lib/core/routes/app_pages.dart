@@ -3,8 +3,9 @@ import 'package:mega_news_app/core/layout/main_layout.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/auth_page.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/create_new_password_page.dart';
 import 'package:mega_news_app/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/search_box.dart';
+import 'package:mega_news_app/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:mega_news_app/features/search/pages/show_search_page.dart';
+import 'package:mega_news_app/features/settings/presentation/pages/settings_page.dart';
 import 'package:mega_news_app/features/welcome/welcome_page.dart';
 
 class AppPages {
@@ -17,6 +18,7 @@ class AppPages {
 
   static const loyoutPage = '/loyoutPage';
   static const searchPage = '/searchPage';
+  static const favoritesPage = '/favoritesPage';
 
   static List<GetPage> routes = [
     GetPage(
@@ -50,16 +52,23 @@ class AppPages {
       page: () => MainLayout(),
       transition: Transition.fadeIn,
     ),
-    // GetPage(
-    //   name: settingsPage,
-    //   page: () => SettingsPage(),
-    //   transition: Transition.fadeIn,
-    // ),
+    GetPage(
+      name: settingsPage,
+      page: () => const SettingsPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
     GetPage(
       name: searchPage,
       page: () => const ShowSearchPage(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 700),
+    ),
+    GetPage(
+      name: favoritesPage,
+      page: () => const FavoritesPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 300),
     ),
   ];
 }

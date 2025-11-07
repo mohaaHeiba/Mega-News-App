@@ -3,6 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
+import 'package:mega_news_app/features/favorites/presentation/controller/favorites_controller.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 // 1. استدعاء Timeago
 // 2. استدعاء صفحة التفاصيل من مكانها الجديد
@@ -15,6 +17,9 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesController = Get.find<FavoritesController>();
+    final helper = AppContextHelper(context);
+    
     return Material(
       color: Theme.of(context).cardColor,
       borderRadius: BorderRadius.circular(12),
@@ -88,6 +93,26 @@ class ArticleTile extends StatelessWidget {
                       ],
                     ),
                   ],
+                ),
+              ),
+              // Favorite Button
+              Obx(
+                () => IconButton(
+                  icon: Icon(
+                    favoritesController.isFavorite(article)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: favoritesController.isFavorite(article)
+                        ? Colors.red
+                        : Colors.grey,
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    favoritesController.toggleFavorite(article);
+                  },
+                  tooltip: favoritesController.isFavorite(article)
+                      ? helper.s.removeFromFavorites
+                      : helper.s.addToFavorites,
                 ),
               ),
             ],

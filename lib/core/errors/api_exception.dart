@@ -36,6 +36,23 @@ class UnauthorizedException extends ApiException {
   });
 }
 
+class ForbiddenException extends ApiException {
+  ForbiddenException({
+    super.message = "Access forbidden. Please check your API key.",
+    super.statusCode = 403,
+  });
+}
+
+class RateLimitException extends ApiException {
+  final Duration? retryAfter;
+  
+  RateLimitException({
+    super.message = "Too many requests. Please try again later.",
+    super.statusCode = 429,
+    this.retryAfter,
+  });
+}
+
 class NetworkException extends ApiException {
   NetworkException({super.message = "No internet connection"});
 }

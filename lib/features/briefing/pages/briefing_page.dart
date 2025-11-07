@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/features/article_detail/pages/article_detail_page.dart';
 import 'package:mega_news_app/features/briefing/controller/briefing_controller.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AiBriefingPage extends StatelessWidget {
@@ -11,12 +12,13 @@ class AiBriefingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final ctrl = Get.put(AiBriefingController());
+    final helper = AppContextHelper(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'AI Briefing',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          helper.s.briefing,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
           Obx(
@@ -40,7 +42,7 @@ class AiBriefingPage extends StatelessWidget {
       body: Obx(() {
         // --- حالة التحميل (Shimmer) ---
         if (ctrl.isLoading.value && ctrl.summaries.isEmpty) {
-          return _buildShimmer(context, theme, ctrl.topicsToBrief.length);
+          return _buildShimmer(context, theme, ctrl.getTopicsToBrief().length);
         }
 
         // --- حالة عرض النتايج ---
@@ -72,6 +74,7 @@ class AiBriefingPage extends StatelessWidget {
     ThemeData theme,
     TopicSummary item,
   ) {
+    final helper = AppContextHelper(context);
     return Card(
       elevation: 2,
       shadowColor: theme.shadowColor.withOpacity(0.1),
@@ -105,7 +108,7 @@ class AiBriefingPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'View AI Summary',
+                helper.s.viewAiSummary,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
               ),

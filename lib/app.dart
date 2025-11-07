@@ -11,7 +11,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginBefore = GetStorage().read('loginBefore') ?? false;
+    final storage = GetStorage();
+    final loginBefore = storage.read('loginBefore') ?? false;
+    
+    // Load saved theme mode
+    final savedThemeMode = storage.read('themeMode');
+    ThemeMode themeMode = ThemeMode.system;
+    if (savedThemeMode != null) {
+      themeMode = ThemeMode.values.firstWhere(
+        (mode) => mode.toString() == savedThemeMode,
+        orElse: () => ThemeMode.system,
+      );
+    }
+    
+    // Load saved locale
+    final savedLanguage = storage.read('language') ?? 'en';
+    final locale = Locale(savedLanguage);
+    
     return GetMaterialApp(
       localizationsDelegates: [
         S.delegate,
@@ -20,12 +36,11 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      locale: const Locale('en'),
+      locale: locale,
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
+      themeMode: themeMode,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      // home: WelcomePage(),
       initialRoute: loginBefore ? AppPages.loyoutPage : AppPages.welcomePage,
       getPages: AppPages.routes,
     );

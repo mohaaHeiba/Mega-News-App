@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mega_news_app/core/layout/layout_controller.dart';
 import 'package:mega_news_app/core/theme/app_colors.dart';
 import 'package:mega_news_app/core/theme/app_theme_helper.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -12,6 +13,7 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<LayoutController>();
     final theme = AppThemeHelper(context);
+    final helper = AppContextHelper(context);
 
     return Obx(
       () => Container(
@@ -46,7 +48,7 @@ class BottomNavBar extends StatelessWidget {
                   controller: controller,
                   icon: Icons.home_outlined,
                   activeIcon: Icons.home_rounded,
-                  label: 'Home',
+                  label: helper.s.home,
                 ),
 
                 _navItem(
@@ -54,7 +56,7 @@ class BottomNavBar extends StatelessWidget {
                   controller: controller,
                   icon: Icons.auto_awesome_outlined,
                   activeIcon: Icons.auto_awesome_rounded,
-                  label: 'Briefing',
+                  label: helper.s.briefing,
                 ),
 
                 _navItem(
@@ -62,7 +64,7 @@ class BottomNavBar extends StatelessWidget {
                   controller: controller,
                   icon: Icons.menu_rounded,
                   activeIcon: Icons.menu_open_rounded,
-                  label: 'Menu',
+                  label: helper.s.menu,
                 ),
               ],
             ),

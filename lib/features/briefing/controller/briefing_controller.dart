@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
 import 'package:mega_news_app/features/news/data/datasources/gnews_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsapi_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsdata_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/mappers/article_mapper.dart';
-import 'package:mega_news_app/features/news/domain/entities/article.dart';
 import 'package:mega_news_app/features/news/domain/repositories/i_news_repository.dart';
 import 'package:mega_news_app/features/news/domain/repositories/news_repository_impl.dart';
 import 'package:mega_news_app/features/gemini/data/datasources/gemini_remote_datasource.dart';
 import 'package:mega_news_app/features/gemini/data/repositories/gemini_repository_impl.dart';
-import 'package:mega_news_app/features/gemini/domain/repositories/i_gemini_repository.dart';
 import 'package:mega_news_app/features/gemini/domain/usecases/get_ai_summary_usecase.dart';
+import 'package:mega_news_app/generated/l10n.dart';
 
 /// (موديل TopicSummary زي ما هو)
 class TopicSummary {
@@ -46,26 +44,29 @@ class AiBriefingController extends GetxController {
   // --- نهاية الحذف ---
 
   // --- (الأقسام زي ما هي) ---
-  final topicsToBrief = const [
-    {'label': 'General', 'value': 'general', 'icon': Icons.public_rounded},
-    {'label': 'Sports', 'value': 'sports', 'icon': Icons.sports_soccer_rounded},
-    {
-      'label': 'Technology',
-      'value': 'technology',
-      'icon': Icons.computer_rounded,
-    },
-    {
-      'label': 'Business',
-      'value': 'business',
-      'icon': Icons.business_center_rounded,
-    },
-    {
-      'label': 'Health',
-      'value': 'health',
-      'icon': Icons.local_hospital_rounded,
-    },
-    {'label': 'Science', 'value': 'science', 'icon': Icons.science_rounded},
-  ];
+  List<Map<String, dynamic>> getTopicsToBrief() {
+    final s = S.current;
+    return [
+      {'label': s.general, 'value': 'general', 'icon': Icons.public_rounded},
+      {'label': s.sports, 'value': 'sports', 'icon': Icons.sports_soccer_rounded},
+      {
+        'label': s.technology,
+        'value': 'technology',
+        'icon': Icons.computer_rounded,
+      },
+      {
+        'label': s.business,
+        'value': 'business',
+        'icon': Icons.business_center_rounded,
+      },
+      {
+        'label': s.health,
+        'value': 'health',
+        'icon': Icons.local_hospital_rounded,
+      },
+      {'label': s.science, 'value': 'science', 'icon': Icons.science_rounded},
+    ];
+  }
 
   // --- (الـ Constructor والـ Injection زي ما هما) ---
   AiBriefingController() {
@@ -105,7 +106,7 @@ class AiBriefingController extends GetxController {
     summaries.clear();
 
     try {
-      final List<Future<TopicSummary>> futures = topicsToBrief.map((topic) {
+      final List<Future<TopicSummary>> futures = getTopicsToBrief().map((topic) {
         return _fetchAndSummarizeTopic(
           topic['label'] as String,
           topic['value'] as String,
@@ -115,7 +116,8 @@ class AiBriefingController extends GetxController {
       final results = await Future.wait(futures);
       summaries.value = results;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to generate briefings: ${e.toString()}');
+      final s = S.current;
+      Get.snackbar(s.error, '${s.failedToGenerateBriefings}: ${e.toString()}');
     } finally {
       isLoading(false);
     }
@@ -138,12 +140,13 @@ class AiBriefingController extends GetxController {
 
       // 9. لو مفيش أخبار (بنستخدم articles)
       if (articles.isEmpty) {
+        final s = S.current;
         return TopicSummary(
           topicLabel: label,
           topicValue: value,
           icon: icon,
           // 🚀 10. تعديل رسالة الخطأ
-          summary: 'No recent news found to summarize for this topic.',
+          summary: s.noRecentNewsFound,
         );
       }
 
@@ -160,11 +163,12 @@ class AiBriefingController extends GetxController {
         summary: summary,
       );
     } catch (e) {
+      final s = S.current;
       return TopicSummary(
         topicLabel: label,
         topicValue: value,
         icon: icon,
-        summary: 'Failed to generate summary: ${e.toString()}',
+        summary: '${s.failedToGenerateSummary}: ${e.toString()}',
       );
     }
   }

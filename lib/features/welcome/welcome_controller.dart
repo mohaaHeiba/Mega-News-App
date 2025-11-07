@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mega_news_app/generated/l10n.dart';
+import 'package:mega_news_app/core/utils/app_context_helper.dart';
 
 class WelcomeController extends GetxController {
   final PageController imageController = PageController();
@@ -20,26 +20,26 @@ class WelcomeController extends GetxController {
   }
 
   List<Map<String, dynamic>> getPages(BuildContext context) {
-    final s = S.of(context);
+    final helper = AppContextHelper(context);
     return [
       {
-        "title": s.welcomeTitle1,
-        "subtitle": s.welcomeSubtitle1,
+        "title": helper.s.welcomeTitle1,
+        "subtitle": helper.s.welcomeSubtitle1,
         "image": "assets/images/news_aggregation.png",
       },
       {
-        "title": s.welcomeTitle2,
-        "subtitle": s.welcomeSubtitle2,
+        "title": helper.s.welcomeTitle2,
+        "subtitle": helper.s.welcomeSubtitle2,
         "image": "assets/images/search_summary.png",
       },
       {
-        "title": s.welcomeTitle3,
-        "subtitle": s.welcomeSubtitle3,
+        "title": helper.s.welcomeTitle3,
+        "subtitle": helper.s.welcomeSubtitle3,
         "image": "assets/images/favorites.png",
       },
       {
-        "title": s.welcomeTitle4,
-        "subtitle": s.welcomeSubtitle4,
+        "title": helper.s.welcomeTitle4,
+        "subtitle": helper.s.welcomeSubtitle4,
         "image": "assets/images/notifications.png",
       },
     ];

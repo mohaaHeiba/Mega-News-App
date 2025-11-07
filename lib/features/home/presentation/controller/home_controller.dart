@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:mega_news_app/core/errors/api_exception.dart';
 import 'package:mega_news_app/core/network/api_cleint.dart';
+import 'package:mega_news_app/core/services/error_handler_service.dart';
 import 'package:mega_news_app/features/news/data/datasources/gnews_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsapi_remote_datasource.dart';
 import 'package:mega_news_app/features/news/data/datasources/newsdata_remote_datasource.dart';
@@ -11,6 +12,7 @@ import 'package:mega_news_app/features/news/data/mappers/article_mapper.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 import 'package:mega_news_app/features/news/domain/repositories/i_news_repository.dart';
 import 'package:mega_news_app/features/news/domain/repositories/news_repository_impl.dart';
+import 'package:mega_news_app/generated/l10n.dart';
 
 class HomeController extends GetxController {
   // ==============================================================
@@ -25,17 +27,20 @@ class HomeController extends GetxController {
   final selectedCategory = 'general'.obs;
 
   // ==============================================================
-  // ategories (for UI Tabs or Dropdown)
+  // Categories (for UI Tabs or Dropdown)
   // ==============================================================
-  final categories = const [
-    {'label': 'General', 'value': 'general'},
-    {'label': 'Sports', 'value': 'sports'},
-    {'label': 'Technology', 'value': 'technology'},
-    {'label': 'Business', 'value': 'business'},
-    {'label': 'Health', 'value': 'health'},
-    {'label': 'Science', 'value': 'science'},
-    {'label': 'Entertainment', 'value': 'entertainment'},
-  ];
+  List<Map<String, String>> getCategories() {
+    final s = S.current;
+    return [
+      {'label': s.general, 'value': 'general'},
+      {'label': s.sports, 'value': 'sports'},
+      {'label': s.technology, 'value': 'technology'},
+      {'label': s.business, 'value': 'business'},
+      {'label': s.health, 'value': 'health'},
+      {'label': s.science, 'value': 'science'},
+      {'label': s.entertainment, 'value': 'entertainment'},
+    ];
+  }
 
   // ==============================================================
   // News Articles List (Domain Entity)
@@ -75,6 +80,7 @@ class HomeController extends GetxController {
   // ==============================================================
   // Fetch News by Category
   // Handles loading, API errors, and UI update
+  // Uses ErrorHandlerService for unified error handling
   // ==============================================================
   Future<void> fetchNews() async {
     try {
@@ -88,10 +94,23 @@ class HomeController extends GetxController {
       );
 
       articles.value = fetchedArticles;
+      
+      // Show success message if we got results (optional - can be removed if too verbose)
+      // if (fetchedArticles.isNotEmpty) {
+      //   AppLogger.info('Loaded ${fetchedArticles.length} articles');
+      // }
     } on ApiException catch (e) {
-      Get.snackbar('Error Loading News', e.message);
+      // Use ErrorHandlerService for consistent error handling
+      ErrorHandlerService.handleError(
+        e,
+        customMessage: S.current.errorLoadingNews,
+      );
     } catch (e) {
-      Get.snackbar('An error occurred', e.toString());
+      // Handle unexpected errors
+      ErrorHandlerService.handleError(
+        e,
+        customMessage: S.current.anErrorOccurred,
+      );
     } finally {
       isLoading(false);
     }
