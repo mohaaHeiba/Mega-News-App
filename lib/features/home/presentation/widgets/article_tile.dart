@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 // 1. استدعاء Timeago
 // 2. استدعاء صفحة التفاصيل من مكانها الجديد
-import 'package:mega_news_app/features/article_detail/presentation/pages/article_detail_page.dart';
+import 'package:mega_news_app/features/article_detail/pages/article_detail_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ArticleTile extends StatelessWidget {

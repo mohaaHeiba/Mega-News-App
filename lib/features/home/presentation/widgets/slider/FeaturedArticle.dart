@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
 // 1. استدعاء صفحة التفاصيل من مكانها الجديد
-import 'package:mega_news_app/features/article_detail/presentation/pages/article_detail_page.dart';
+import 'package:mega_news_app/features/article_detail/pages/article_detail_page.dart';
 
 class FeaturedArticle extends StatelessWidget {
   final Article article;
