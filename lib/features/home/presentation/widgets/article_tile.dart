@@ -1,13 +1,8 @@
-// lib/features/news/presentation/widgets/article_tile.dart
-// (ده الملف اللي كان في home/presentation/widgets واتنقل)
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mega_news_app/core/utils/app_context_helper.dart';
 import 'package:mega_news_app/features/favorites/presentation/controller/favorites_controller.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
-// 1. استدعاء Timeago
-// 2. استدعاء صفحة التفاصيل من مكانها الجديد
 import 'package:mega_news_app/features/article_detail/pages/article_detail_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -19,14 +14,18 @@ class ArticleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final favoritesController = Get.find<FavoritesController>();
     final helper = AppContextHelper(context);
-    
+
     return Material(
       color: Theme.of(context).cardColor,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          Get.to(() => ArticleDetailPage(article: article));
+          Get.to(
+            () => ArticleDetailPage(article: article),
+            transition: Transition.fadeIn,
+            duration: Duration(milliseconds: 600),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -34,21 +33,16 @@ class ArticleTile extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Hero(
-                  // 3. تعديل الـ Tag
-                  tag: article.id,
-                  child: Image.network(
-                    // 4. تعديل الـ Image
-                    article.imageUrl ?? '', // Handle null image
+                child: Image.network(
+                  article.imageUrl ?? '',
+                  width: 110,
+                  height: 72,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, _, __) => Container(
                     width: 110,
                     height: 72,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, _, __) => Container(
-                      width: 110,
-                      height: 72,
-                      color: Colors.grey.shade200,
-                      child: const Icon(Icons.broken_image, color: Colors.grey),
-                    ),
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
                   ),
                 ),
               ),
@@ -67,8 +61,7 @@ class ArticleTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      // 5. تعديل الـ Summary
-                      article.description ?? '', // Handle null description
+                      article.description ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -83,7 +76,6 @@ class ArticleTile extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          // 6. تعديل الـ Time
                           timeago.format(article.publishedAt),
                           style: const TextStyle(
                             color: Colors.grey,
@@ -95,7 +87,6 @@ class ArticleTile extends StatelessWidget {
                   ],
                 ),
               ),
-              // Favorite Button
               Obx(
                 () => IconButton(
                   icon: Icon(

@@ -23,7 +23,8 @@ class GNewsRemoteDataSourceImpl implements IGNewsRemoteDataSource {
       try {
         _apiKey = ApiKeyValidator.validateApiKey(
           'GNEWS_API',
-          customMessage: 'GNews API key is missing or invalid. Please check your .env file.',
+          customMessage:
+              'GNews API key is missing or invalid. Please check your .env file.',
         );
         _isKeyValidated = true;
         AppLogger.info('GNews API key validated successfully');
@@ -69,6 +70,7 @@ class GNewsRemoteDataSourceImpl implements IGNewsRemoteDataSource {
           'country': 'eg',
           'apikey': _validatedApiKey,
           'topic': category,
+          'max': '50',
         },
       );
       final responseModel = GnewsResponseModel.fromJson(responseMap);

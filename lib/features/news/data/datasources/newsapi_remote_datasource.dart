@@ -23,7 +23,8 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
       try {
         _apiKey = ApiKeyValidator.validateApiKey(
           'NEWS_API',
-          customMessage: 'NewsAPI key is missing or invalid. Please check your .env file.',
+          customMessage:
+              'NewsAPI key is missing or invalid. Please check your .env file.',
         );
         _isKeyValidated = true;
         AppLogger.info('NewsAPI key validated successfully');
@@ -41,10 +42,16 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
       AppLogger.debug('NewsAPI: Searching for "$query"');
       final responseMap = await apiClient.get(
         '$_baseUrl/everything',
-        queryParameters: {'q': query, 'language': 'ar', 'apiKey': _validatedApiKey},
+        queryParameters: {
+          'q': query,
+          'language': 'ar',
+          'apiKey': _validatedApiKey,
+        },
       );
       final responseModel = NewsapiResponseModel.fromJson(responseMap);
-      AppLogger.info('NewsAPI: Found ${responseModel.articles.length} articles');
+      AppLogger.info(
+        'NewsAPI: Found ${responseModel.articles.length} articles',
+      );
       return responseModel.articles;
     } on ApiException {
       rethrow;
@@ -61,7 +68,9 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
     required String category,
   }) async {
     try {
-      AppLogger.debug('NewsAPI: Fetching top headlines for category "$category"');
+      AppLogger.debug(
+        'NewsAPI: Fetching top headlines for category "$category"',
+      );
       final responseMap = await apiClient.get(
         '$_baseUrl/top-headlines',
         queryParameters: {
@@ -69,10 +78,13 @@ class NewsApiRemoteDataSourceImpl implements INewsApiRemoteDataSource {
           'country': 'eg',
           'apiKey': _validatedApiKey,
           'category': category,
+          'pageSize': 50,
         },
       );
       final responseModel = NewsapiResponseModel.fromJson(responseMap);
-      AppLogger.info('NewsAPI: Found ${responseModel.articles.length} headlines');
+      AppLogger.info(
+        'NewsAPI: Found ${responseModel.articles.length} headlines',
+      );
       return responseModel.articles;
     } on ApiException {
       rethrow;

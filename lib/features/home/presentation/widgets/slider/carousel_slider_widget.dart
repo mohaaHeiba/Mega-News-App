@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mega_news_app/features/news/domain/entities/article.dart';
-import 'package:mega_news_app/features/home/presentation/widgets/slider/FeaturedArticle.dart';
+import 'package:mega_news_app/features/home/presentation/widgets/slider/featured_article.dart';
 
 class CarouselSliderWidget extends StatelessWidget {
   final List<Article> articles;
